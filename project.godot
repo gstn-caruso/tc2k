@@ -1,0 +1,29 @@
+; Engine configuration file. Edit project settings through the Godot editor.
+config_version=5
+
+[application]
+
+config/name="TC2K"
+run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+
+[autoload]
+
+Localization="*res://scripts/localization.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+
+[internationalization]
+
+locale/fallback="es"
+locale/translations=PackedStringArray("res://assets/i18n/messages.en.translation", "res://assets/i18n/messages.es.translation")
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.055, 0.067, 0.09, 1)

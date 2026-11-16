@@ -1,0 +1,11 @@
+{
+  "title": "TC2K",
+  "slug": "tc2k",
+  "initial_version": "0.1.0",
+  "godot_version": "4.7.2",
+  "export_preset": "Linux",
+  "tests": [
+    "tests/smoke.gd"
+  ],
+  "summary": "Proyecto inicial con escena de bienvenida y selecci\u00f3n de idioma espa\u00f1ol/ingl\u00e9s."
+}
