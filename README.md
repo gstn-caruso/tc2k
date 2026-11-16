@@ -2,6 +2,9 @@
 
 Proyecto inicial de Godot 4.7.2 con GDScript y renderizador Compatibility.
 
+El alcance propuesto, las reglas de la primera versión y las tareas pendientes
+están en [el plan del juego](PLAN.md).
+
 ## Ejecutar
 
 Importá `project.godot` desde Godot 4.7.2 y presioná **F6** para ejecutar la
