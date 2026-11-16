@@ -5,12 +5,23 @@ Proyecto inicial de Godot 4.7.2 con GDScript y renderizador Compatibility.
 ## Ejecutar
 
 Importá `project.godot` desde Godot 4.7.2 y presioná **F6** para ejecutar la
-escena abierta o **F5** para iniciar el proyecto. La escena principal es
-`scenes/main.tscn`.
+escena abierta o **F5** para iniciar el proyecto. `scenes/main.tscn` muestra el
+título Turismo Carretera 2K con la bandera argentina y espera **Enter**.
+Después aparece `scenes/track_selection.tscn`: **← / →** recorren las pistas,
+**Enter** confirma la elección y **Esc** regresa al título. El circuito elegido
+queda en `RaceSetup`, con un identificador estable y una señal de confirmación.
 
-La interfaz incluye español e inglés. Los textos están en
-`assets/i18n/messages.csv`; la preferencia de idioma se guarda en
-`user://settings.cfg`, separada de futuras partidas.
+Los circuitos son Oscar y Juan Gálvez, circuito 8 (baja), Oscar Cabalén,
+circuito 3 (media), y El Zonda–Eduardo Copello (alta). Las miniaturas conservan
+las formas de los mapas de referencia; los detalles de terreno son ilustrativos.
+
+La composición conserva la proporción 4:3 al redimensionar la ventana. Se puede
+recorrer las opciones también después de confirmar para cambiar la elección.
+
+La interfaz usa i18n nativo de Godot y toma el idioma del sistema operativo al
+iniciar. Incluye español e inglés; los demás idiomas usan español como respaldo.
+No se muestra un selector manual ni se leen preferencias antiguas de idioma.
+Los textos están en `assets/i18n/messages.csv` y las convenciones en `AGENTS.md`.
 
 ## Estructura
 

@@ -5,3 +5,4 @@
 *.wav binary
 *.glb binary
 *.translation binary
+*.ttf binary

@@ -7,5 +7,5 @@
   "tests": [
     "tests/smoke.gd"
   ],
-  "summary": "Proyecto inicial con escena de bienvenida y selecci\u00f3n de idioma espa\u00f1ol/ingl\u00e9s."
+  "summary": "Título arcade con bandera argentina, idioma automático del sistema y selección por teclado de Gálvez 8, Cabalén 3 y El Zonda."
 }

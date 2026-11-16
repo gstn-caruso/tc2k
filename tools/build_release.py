@@ -22,7 +22,10 @@ def main():
         parser.error("Version must be MAJOR.MINOR.PATCH")
     config = json.loads(Path("release-config.json").read_text())
     slug = config["slug"]
-    folder = Path("build") / f"{slug}-{args.version}-linux-x86_64"
+    build = Path("build")
+    build.mkdir(exist_ok=True)
+    (build / ".gdignore").touch()
+    folder = build / f"{slug}-{args.version}-linux-x86_64"
     folder.mkdir(parents=True, exist_ok=True)
     executable = folder / (slug + ".x86_64")
     version_file = Path("version.txt")
@@ -41,7 +44,7 @@ def main():
     # Run the actual exported binary with isolated user data, not just the editor.
     with tempfile.TemporaryDirectory(prefix="godot-export-smoke-") as user_data:
         env = {**os.environ, "XDG_DATA_HOME": user_data}
-        result = subprocess.run([str(executable.resolve()), "--headless", "--quit-after", "20"], env=env, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=45)
+        result = subprocess.run([str(executable.resolve()), "--headless", "--fixed-fps", "60", "--quit-after", "300"], env=env, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=45)
         print(result.stdout, end="")
         if result.returncode or re.search(r"^(?:SCRIPT )?ERROR:", result.stdout, re.MULTILINE):
             raise RuntimeError("Exported binary smoke test failed")
@@ -50,7 +53,7 @@ def main():
     shutil.copytree("licenses", folder / "licenses", dirs_exist_ok=True)
     for pack in Path("assets").glob("*/License.txt"):
         shutil.copy(pack, folder / "licenses" / (pack.parent.name + "_LICENSE.txt"))
-    (folder / "RUN.txt").write_text(f"{config['title']} v{args.version}\n\nRun ./{executable.name}\nSelect English or Español in the language menu.\n")
+    (folder / "RUN.txt").write_text(f"{config['title']} v{args.version}\n\nRun ./{executable.name}\nEnter: circuit selection. Left/right: choose circuit. Enter: confirm. Escape: back.\nLanguage follows the operating system; Spanish is the fallback.\n")
     archive = Path("build") / (folder.name + ".zip")
     with zipfile.ZipFile(archive, "w", zipfile.ZIP_DEFLATED) as zipped:
         for file in sorted(folder.rglob("*")):
