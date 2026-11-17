@@ -28,9 +28,10 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if not driving_enabled:
 		return
-	var throttle := Input.get_action_strength("drive_accelerate")
-	var brake := Input.get_action_strength("drive_brake")
-	var turn := Input.get_axis("drive_left", "drive_right")
+	var controls := _read_driving_input()
+	var throttle := controls.x
+	var brake := controls.y
+	var turn := controls.z
 	steering = move_toward(steering, turn, (tuning.steering_return if is_zero_approx(turn) else tuning.steering_rate) * delta)
 	on_asphalt = track.is_on_road(global_position) if track else true
 	var forward := -global_basis.z
@@ -69,6 +70,12 @@ func _physics_process(delta: float) -> void:
 		_visual.rotation.x = lerpf(_visual.rotation.x, atan2(normal.z, normal.y), 1.0 - exp(-8 * delta))
 	_visual.rotation.z = lerpf(_visual.rotation.z, -steering * minf(speed / 250, 0.055), 1.0 - exp(-8 * delta))
 	_visual.update_wheels(steering * steering_angle, speed * delta)
+
+
+func _read_driving_input() -> Vector3:
+	# Throttle, brake and steering share the same physics for players and CPU cars.
+	return Vector3(Input.get_action_strength("drive_accelerate"),
+		Input.get_action_strength("drive_brake"), Input.get_axis("drive_left", "drive_right"))
 
 
 func reset_to(pose: Transform3D) -> void:

@@ -1,5 +1,5 @@
 extends SceneTree
-## Verify OS language and the complete title → circuit → car → race flow.
+## Verify OS language and the complete title → circuit → car → mode → race flow.
 
 
 func _initialize() -> void:
@@ -41,6 +41,10 @@ func _run() -> void:
 		assert(tr("PRESS_ENTER") != "PRESS_ENTER")
 		assert(tr("SELECT_CIRCUIT") != "SELECT_CIRCUIT")
 		for key in ["SELECT_CAR", "PROTOTYPE_CAR", "FUEGO_LIVERY", "PROTOTYPE_LIVERY", "CAR_COUNT", "CAR_CONTROLS"]:
+			assert(tr(key) != key)
+		for key in ["SELECT_MODE", "MODE_PRACTICE", "MODE_COMPETITION", "PRACTICE_DESCRIPTION",
+			"PRACTICE_RULES", "COMPETITION_DESCRIPTION", "COMPETITION_RULES", "MODE_CONTROLS",
+			"COMPETITION_ONE_LAP", "HUD_POSITION", "RACE_COMPLETE", "RACE_POSITION"]:
 			assert(tr(key) != key)
 	localization.apply_system_language()
 	assert(change_scene_to_file(ProjectSettings.get_setting("application/run/main_scene")) == OK)
@@ -118,7 +122,15 @@ func _run() -> void:
 			assert(current_scene._preview.scene_file_path == setup.CARS[car_index]["scene"])
 			await _press(KEY_KP_ENTER)
 			await process_frame
+			assert(current_scene.name == "ModeSelection" and setup.selected_mode_index == 0)
+			var mode_selection := current_scene
+			for frame in 420:
+				await process_frame
+			assert(current_scene == mode_selection)
+			await _press(KEY_KP_ENTER)
+			await process_frame
 			assert(current_scene.name == "Race" and current_scene.track_id == setup.TRACKS[index]["id"])
+			assert(current_scene.mode_id == "practice" and current_scene.opponents.is_empty())
 			assert(current_scene.car is CharacterBody3D and current_scene.lap.route_length > 3000)
 			assert(current_scene.car.model_id == setup.CARS[car_index]["id"])
 			assert(current_scene.car._visual.scene_file_path == setup.CARS[car_index]["scene"])
@@ -136,5 +148,5 @@ func _run() -> void:
 		await _press(KEY_ESCAPE)
 		await process_frame
 		await process_frame
-	print("Smoke test passed: OS locale, Enter gates, keyboard model preview, wraparound, back navigation, both cars on all circuits and model persistence on retry.")
+	print("Smoke test passed: OS locale, Enter gates, keyboard model preview, mode selection, wraparound, back navigation, both cars on all circuits and model persistence on retry.")
 	quit()

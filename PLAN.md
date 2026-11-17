@@ -15,6 +15,10 @@ implementadas; las decisiones indicadas como propuestas quedan abiertas a ajuste
 - Ya existen el título, el selector, `RaceSetup` y una vuelta contrarreloj jugable
   en Gálvez 8, Cabalén 3 y El Zonda: selección de auto con vista previa 3D, cámara, pistas horneadas,
   progreso continuo, pausa, reposición, resultados y récord por circuito.
+- Después de elegir el auto se selecciona práctica individual o competición
+  de una vuelta contra tres rivales CPU, con posiciones y resultado de carrera.
+  Los rivales usan la física del jugador, anticipan curvas y buscan un carril
+  libre para pasar tráfico lento. Solo la práctica guarda récords.
 - Tres pistas seleccionadas: Gálvez 8, Cabalén 3 y El Zonda.
 - Mantener la interfaz con i18n nativo de Godot, idioma del SO y español como
   respaldo, con catálogo adicional en inglés. Centralizar los textos en
@@ -254,6 +258,7 @@ geometría básica, antes de terminar el arte o construir los otros dos circuito
 | --- | --- |
 | Auto y pista de pruebas: implementada | Teclado, aceleración, frenado, giro progresivo, pasto, pendientes suaves y choques controlables. |
 | Primera vuelta en Gálvez: implementada | Se entra desde el selector, se recorre un trazado cerrado, se registra una vuelta válida y se puede reintentar. |
+| Selección de modo y competición: implementada | Práctica individual o carrera de una vuelta contra tres CPU en las tres pistas, con largada común, pausa, minimapa, posición y resultado. |
 | Contrarreloj completo | Largada, tres vueltas, HUD, resultados y récord independiente por circuito. |
 | Sector visual terminado | Un sector fija materiales, resolución, iluminación y decoración que se puedan repetir. |
 | Cabalén 3: implementada | Trazado plano horneado, vuelta física verificada, minimapa y récord propio. |
@@ -274,7 +279,7 @@ geometría básica, antes de terminar el arte o construir los otros dos circuito
   frecuencia de física. El cronómetro no debe avanzar durante la pausa.
 - Revisar cámara, texturas, sombras, relieve y legibilidad en una build exportada
   de Linux y otra de Windows, además de las pruebas headless de lógica.
-- `tests/smoke.gd` verifica el flujo título → circuito → auto → carrera con ambos
+- `tests/smoke.gd` verifica el flujo título → circuito → auto → modo → carrera con ambos
   modelos en las tres pistas, la vista previa y la persistencia de selección.
   `tests/cars.gd` verifica escala, orientación y pivotes de las ruedas.
   `tests/race.gd` prueba teclado, pausa/foco, reposición, choques,
@@ -284,12 +289,15 @@ geometría básica, antes de terminar el arte o construir los otros dos circuito
   comprueba el minimapa y verifica récords separados, reintentos y regreso al selector.
   En El Zonda valida las colisiones de ambos niveles del puente y el regreso
   desde la banquina en pendiente.
+- `tests/competition.gd` verifica navegación del modo, persistencia, grilla,
+  largada, controles CPU independientes, pausa, vueltas físicas de todos los
+  rivales y del jugador en las tres pistas, posiciones, resultado y reintento.
 - Mantener feature branches, PRs, i18n y releases SemVer con `.deb` y `.exe`
   después de cada merge a `main`.
 
 ## Posibles ampliaciones
 
-- Rivales controlados por la computadora, usando los modelos disponibles.
+- Ampliar la estrategia y dificultad de los rivales CPU.
 - Clasificación para determinar posiciones de largada.
 - Campeonato con puntos acumulados entre fechas.
 - Boxes y carreras especiales inspiradas en los 200 Kilómetros de Buenos Aires,

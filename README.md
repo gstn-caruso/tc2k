@@ -13,8 +13,11 @@ título Turismo Carretera 2K con la bandera argentina y espera **Enter**.
 Después aparece `scenes/track_selection.tscn`: **← / →** recorren las pistas,
 **Enter** confirma el circuito y abre la selección de auto; **Esc** regresa al
 título. En `scenes/car_selection.tscn`, **← / →** eligen el modelo con una
-vista previa 3D giratoria, **Enter** inicia la carrera y **Esc** vuelve a los
-circuitos. Los tres circuitos tienen escenarios 3D jugables.
+vista previa 3D giratoria, **Enter** abre la selección de modo y **Esc** vuelve
+a los circuitos. En `scenes/mode_selection.tscn`, **← / →** eligen práctica
+individual o competición, **Enter** inicia la partida y **Esc** vuelve a los
+autos. Las selecciones se conservan durante la sesión. Los tres circuitos
+tienen escenarios 3D jugables.
 
 Se puede elegir el **Renault Fuego**, con su decoración blanca y amarilla de
 Traverso, o el **Prototipo TC2K** azul y blanco. El Fuego se importó desde la
@@ -27,8 +30,15 @@ Los circuitos son Oscar y Juan Gálvez, circuito 8 (baja), Oscar Cabalén,
 circuito 3 (media), y El Zonda–Eduardo Copello (alta). Las miniaturas conservan
 las formas de los mapas de referencia; los detalles de terreno son ilustrativos.
 
-Las pistas disponibles permiten completar **una vuelta contrarreloj**: cuenta regresiva,
-cronómetro, seguimiento continuo del recorrido, resultado, récord local y reintento.
+**Práctica individual** permite completar una vuelta contrarreloj: cuenta
+regresiva, cronómetro, seguimiento continuo del recorrido, resultado, récord
+local y reintento. **Competición** enfrenta al jugador con tres rivales CPU
+en una carrera de una vuelta. Los rivales aceleran, frenan para las curvas y
+buscan un carril libre para pasar autos lentos con la misma física y colisiones
+que el jugador. Comparten la largada y la pausa; el HUD muestra la posición
+y el minimapa identifica los cuatro autos. El resultado conserva el orden de
+llegada. El reloj de competición arranca con la largada; el de práctica, al
+cruzar la línea por primera vez. Solo la práctica guarda récords locales.
 No hay puntos de paso obligatorios: se completa el circuito y se cruza la meta
 en el sentido correcto, también por la banquina o el pasto. El auto tiene
 aceleración y dirección progresivas, frenado, una reducción suave de velocidad
@@ -52,8 +62,11 @@ La carrera conserva la proporción 4:3. El mundo se dibuja a 640×480 y se ampl�
 con filtro nearest; el HUD se dibuja a la resolución de la ventana.
 El HUD tiene instrumentos flotantes inspirados en los arcades de los 90:
 cronómetro amarillo, velocímetro con escala curva, vuelta, récord y progreso
-en verde. A la derecha muestra los mandos en vivo (dirección y pedales) y el
-minimapa del circuito. La pausa y los resultados usan bordes a cuadros.
+en verde. En competición, la posición reemplaza al récord. A la derecha muestra
+los mandos en vivo (dirección y pedales) y el minimapa del circuito: el jugador
+es el número 1 rojo y los rivales son 2, 3 y 4 en amarillo. Cuando van juntos,
+los indicadores se separan con líneas hacia sus posiciones reales para que
+ninguno quede oculto. La pausa y los resultados usan bordes a cuadros.
 
 La interfaz usa i18n nativo de Godot y toma el idioma del sistema operativo al
 iniciar. Incluye español e inglés; los demás idiomas usan español como respaldo.

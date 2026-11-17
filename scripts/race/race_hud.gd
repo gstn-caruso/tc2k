@@ -65,7 +65,7 @@ func _draw() -> void:
 	_draw_map()
 	_text(race.track_definition["hud_name"], Vector2(25, 667), 22, WHITE, TITLE)
 	_text(tr(race.track_definition["variant"]), Vector2(25, 690), 13, GOLD)
-	_text(tr("TIME_TRIAL_ONE_LAP"), Vector2(25, 711), 12, WHITE)
+	_text(tr("COMPETITION_ONE_LAP" if race.is_competition() else "TIME_TRIAL_ONE_LAP"), Vector2(25, 711), 12, WHITE)
 	_draw_state()
 	draw_set_transform_matrix(Transform2D.IDENTITY)
 
@@ -73,14 +73,18 @@ func _draw() -> void:
 func _draw_lap() -> void:
 	_center(tr("HUD_LAP"), Vector2(103, 28), 23, WHITE, TITLE)
 	_center("1/1", Vector2(103, 91), 65, WHITE, DIGITS)
-	_text(tr("BEST_LAP"), Vector2(25, 129), 15, GOLD)
-	_text(time_text(race.best_time), Vector2(25, 157), 23, GOLD, DIGITS)
+	if race.is_competition():
+		_text(tr("HUD_POSITION"), Vector2(25, 129), 15, GOLD)
+		_text("%d/%d" % [race.player_position(), race.opponents.size() + 1], Vector2(25, 177), 43, GOLD, DIGITS)
+	else:
+		_text(tr("BEST_LAP"), Vector2(25, 129), 15, GOLD)
+		_text(time_text(race.best_time), Vector2(25, 157), 23, GOLD, DIGITS)
 
 
 func _draw_speed() -> void:
 	_center(tr("HUD_TIME"), Vector2(480, 20), 15, WHITE, TITLE)
-	# The large clock remains a lap timer; this mode has no time limit.
-	var centiseconds := int(race.lap.elapsed * 100.0)
+	# Practice times the lap; competition times the race from lights out.
+	var centiseconds := int((race.race_time if race.is_competition() else race.lap.elapsed) * 100.0)
 	var clock := "%02d:%02d.%02d" % [centiseconds / 6000,
 		(centiseconds / 100) % 60, centiseconds % 100]
 	_center(clock, Vector2(480, 72), 52, GOLD, DIGITS)
@@ -185,10 +189,47 @@ func _draw_map() -> void:
 		for column in 3:
 			draw_rect(Rect2(finish + Vector2(column * 4 - 6, row * 4 - 4), Vector2(4, 4)),
 				WHITE if (row + column) % 2 == 0 else INK)
-	var car := _map_point(race.track.to_local(race.car.global_position))
-	draw_rect(Rect2(car - Vector2(9, 12), Vector2(18, 24)), INK)
-	draw_rect(Rect2(car - Vector2(7, 10), Vector2(14, 20)), RED)
-	_center("1", car + Vector2(0, 6), 16, WHITE, DIGITS, 1)
+	var points := PackedVector2Array([_map_point(race.track.to_local(race.car.global_position))])
+	for opponent in race.opponents:
+		points.append(_map_point(race.track.to_local(opponent.global_position)))
+	var markers := _separate_map_markers(points)
+	# Keep a dot at the real position and connect displaced number badges to it.
+	for index in points.size():
+		var color := RED if index == 0 else GOLD
+		draw_line(points[index], markers[index], INK, 4, true)
+		draw_line(points[index], markers[index], color, 2, true)
+		draw_circle(points[index], 3.5, INK)
+		draw_circle(points[index], 2, color)
+	for index in markers.size():
+		var marker := markers[index]
+		draw_rect(Rect2(marker - Vector2(7, 9), Vector2(14, 18)), INK)
+		draw_rect(Rect2(marker - Vector2(5, 7), Vector2(10, 14)), RED if index == 0 else GOLD)
+		_center(str(index + 1), marker + Vector2(0, 5), 13, WHITE if index == 0 else INK, DIGITS, 0)
+
+
+func _separate_map_markers(points: PackedVector2Array) -> PackedVector2Array:
+	var markers := PackedVector2Array()
+	var bounds := MAP_RECT.grow(3)
+	for point in points:
+		var chosen := point
+		var found := false
+		for radius in [0.0, 20.0, 32.0, 44.0]:
+			for step in 16:
+				var candidate: Vector2 = point + Vector2.from_angle(-PI * 0.5 + step * TAU / 16.0) * radius
+				candidate = candidate.clamp(bounds.position, bounds.end)
+				var clear := true
+				for marker in markers:
+					if candidate.distance_to(marker) < 20.0:
+						clear = false
+						break
+				if clear:
+					chosen = candidate
+					found = true
+					break
+			if found:
+				break
+		markers.append(chosen)
+	return markers
 
 
 func _map_point(point: Vector3) -> Vector2:
@@ -219,11 +260,16 @@ func _draw_state() -> void:
 			_center(label, Vector2(480, 348 + i * 49), 25, color, TITLE)
 		_center(tr("PAUSE_CONTROLS"), Vector2(480, 519), 14, WHITE)
 	elif race.state == RaceController.State.FINISHED:
-		_overlay(tr("LAP_COMPLETE") if not race.lap.invalid else tr("LAP_INVALID"))
-		_center(time_text(race.lap.elapsed), Vector2(480, 365), 48, GOLD, DIGITS)
-		var result := tr("NEW_RECORD") if race.new_record else tr("LAP_RECORDED")
-		if race.lap.invalid:
-			result = tr("INVALID_RECORD_NOTICE")
+		var title := tr("LAP_COMPLETE") if not race.lap.invalid else tr("LAP_INVALID")
+		_overlay(tr("RACE_COMPLETE") if race.is_competition() else title)
+		_center(time_text(race.race_time if race.is_competition() else race.lap.elapsed), Vector2(480, 365), 48, GOLD, DIGITS)
+		var result: String
+		if race.is_competition():
+			result = tr("RACE_POSITION") % [race.player_position(), race.opponents.size() + 1]
+		else:
+			result = tr("NEW_RECORD") if race.new_record else tr("LAP_RECORDED")
+			if race.lap.invalid:
+				result = tr("INVALID_RECORD_NOTICE")
 		_center(result, Vector2(480, 423), 18, WHITE)
 		_center(tr("RESULT_CONTROLS"), Vector2(480, 498), 17, GOLD)
 
