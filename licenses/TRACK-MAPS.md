@@ -18,3 +18,14 @@ Los relieves y colores de terreno de la pantalla son ilustrativos.
 Los datos de OpenStreetMap se ofrecen bajo [ODbL](https://www.openstreetmap.org/copyright).
 Estas licencias se aplican a las miniaturas correspondientes, separadamente de
 la licencia del código y de los demás recursos del proyecto.
+
+## Trazado 3D de Gálvez 8
+
+`assets/tracks/galvez_8/centerline.tres` es una adaptación trazada a mano de
+`galvez_8.svg`, de Gustavo Girardelli y colaboradores de OpenStreetMap. La curva
+y las superficies de pista derivadas en `scenes/race/galvez_8.tscn` conservan
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Se suavizó la
+línea central, se eligió una escala y anchura de prototipo y se generaron asfalto,
+banquinas y guardarraíles. Las alturas y la escenografía son ilustrativas; no
+representan un levantamiento ni una reproducción exacta del autódromo.
+La licencia de esta adaptación es independiente de la del código del juego.

@@ -12,8 +12,9 @@ implementadas; las decisiones indicadas como propuestas quedan abiertas a ajuste
 - Mundo, auto, relieve, cámara y colisiones en 3D; menús y HUD en 2D.
 - Teclado como control principal, con cambios automáticos.
 - Un solo auto disponible por ahora.
-- Ya existen el título, el selector de circuito y la selección guardada en
-  `RaceSetup`.
+- Ya existen el título, el selector, `RaceSetup` y una vuelta contrarreloj jugable
+  en Gálvez 8: auto de prototipo, cámara, pista horneada, controles ordenados,
+  pausa, reposición, resultados y récord local. Los otros circuitos siguen pendientes.
 - Tres pistas seleccionadas: Gálvez 8, Cabalén 3 y El Zonda.
 - Mantener la interfaz con i18n nativo de Godot, idioma del SO y español como
   respaldo, con catálogo adicional en inglés. Centralizar los textos en
@@ -249,10 +250,10 @@ Las dificultades son una propuesta para el juego, no una clasificación oficial.
 La primera entrega jugable debe permitir completar una vuelta en Gálvez con
 geometría básica, antes de terminar el arte o construir los otros dos circuitos.
 
-| Hito pendiente | Criterio para darlo por terminado |
+| Hito / estado | Criterio para darlo por terminado |
 | --- | --- |
-| Auto y pista de pruebas | Teclado, aceleración, frenado, giro progresivo, pasto, pendiente y choques controlables. |
-| Primera vuelta en Gálvez | Se entra desde el selector, se recorre un trazado cerrado, se registra una vuelta válida y se puede reintentar. |
+| Auto y pista de pruebas: pendiente probar una pendiente | Teclado, aceleración, frenado, giro progresivo, pasto, pendiente y choques controlables. |
+| Primera vuelta en Gálvez: implementada | Se entra desde el selector, se recorre un trazado cerrado, se registra una vuelta válida y se puede reintentar. |
 | Contrarreloj completo | Largada, tres vueltas, HUD, resultados y récord independiente por circuito. |
 | Sector visual terminado | Un sector fija materiales, resolución, iluminación y decoración que se puedan repetir. |
 | Cabalén y El Zonda | Comparten controlador y reglas; sus trazados, relieves y dificultad quedan ajustados. |
@@ -271,9 +272,9 @@ geometría básica, antes de terminar el arte o construir los otros dos circuito
   frecuencia de física. El cronómetro no debe avanzar durante la pausa.
 - Revisar cámara, texturas, sombras, relieve y legibilidad en una build exportada
   de Linux y otra de Windows, además de las pruebas headless de lógica.
-- Al conectar la carrera, actualizar `tests/smoke.gd`: hoy verifica que confirmar
-  deja al usuario en el selector. La nueva prueba debe comprobar la pista 3D
-  cargada y conservar las verificaciones de navegación del título y selector.
+- `tests/smoke.gd` verifica el acceso a Gálvez 3D desde el selector y conserva
+  la navegación. `tests/race.gd` prueba teclado, pausa/foco, reposición, choques,
+  controles direccionales y una vuelta física completa. Mantener esas comprobaciones.
 - Mantener feature branches, PRs, i18n y releases SemVer con `.deb` y `.exe`
   después de cada merge a `main`.
 

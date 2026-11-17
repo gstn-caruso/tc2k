@@ -9,7 +9,8 @@
   },
   "maintainer": "Gastón Caruso <gstn.caruso@gmail.com>",
   "tests": [
-    "tests/smoke.gd"
+    "tests/smoke.gd",
+    "tests/race.gd"
   ],
-  "summary": "Título arcade con bandera argentina, idioma automático del sistema y selección por teclado de Gálvez 8, Cabalén 3 y El Zonda."
+  "summary": "Juego de carreras 3D de estética PSX con Gálvez 8 jugable por teclado, vuelta cronometrada e idioma automático del sistema."
 }

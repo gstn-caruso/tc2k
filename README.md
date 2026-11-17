@@ -1,6 +1,6 @@
 # TC2K
 
-Proyecto inicial de Godot 4.7.2 con GDScript y renderizador Compatibility.
+Juego de carreras 3D con estética PSX, Godot 4.7.2, GDScript y renderer Compatibility.
 
 El alcance propuesto, las reglas de la primera versión y las tareas pendientes
 están en [el plan del juego](PLAN.md).
@@ -11,15 +11,31 @@ Importá `project.godot` desde Godot 4.7.2 y presioná **F6** para ejecutar la
 escena abierta o **F5** para iniciar el proyecto. `scenes/main.tscn` muestra el
 título Turismo Carretera 2K con la bandera argentina y espera **Enter**.
 Después aparece `scenes/track_selection.tscn`: **← / →** recorren las pistas,
-**Enter** confirma la elección y **Esc** regresa al título. El circuito elegido
-queda en `RaceSetup`, con un identificador estable y una señal de confirmación.
+**Enter** inicia Gálvez 8 y **Esc** regresa al título. Cabalén y El Zonda
+muestran «Próximamente» al confirmarlos: sus escenarios 3D todavía están pendientes.
 
 Los circuitos son Oscar y Juan Gálvez, circuito 8 (baja), Oscar Cabalén,
 circuito 3 (media), y El Zonda–Eduardo Copello (alta). Las miniaturas conservan
 las formas de los mapas de referencia; los detalles de terreno son ilustrativos.
 
-La composición conserva la proporción 4:3 al redimensionar la ventana. Se puede
-recorrer las opciones también después de confirmar para cambiar la elección.
+La primera pista permite completar **una vuelta contrarreloj**: cuenta regresiva,
+cronómetro, 45 controles de paso en orden, resultado, récord local y reintento.
+El auto tiene aceleración y dirección progresivas, frenado, menor agarre en el
+pasto y colisiones con los guardarraíles. El modelo y los edificios son arte de
+prototipo. La anchura y escala del trazado son aproximadas; Gálvez es plano en
+esta entrega. El modo de tres vueltas y los otros dos escenarios siguen pendientes.
+
+| Acción | Teclas |
+| --- | --- |
+| Acelerar / frenar | W / S o ↑ / ↓ |
+| Girar | A / D o ← / → |
+| Reubicar en el último control | R; invalida la vuelta para récords |
+| Pausar / continuar | Esc; también se pausa al perder el foco |
+| Menú de pausa | ↑ / ↓ y Enter: continuar, reintentar o cambiar pista |
+| Resultado | Enter reintenta; Esc vuelve a los circuitos |
+
+La carrera conserva la proporción 4:3. El mundo se dibuja a 640×480 y se amplía
+con filtro nearest; el HUD se dibuja a la resolución de la ventana.
 
 La interfaz usa i18n nativo de Godot y toma el idioma del sistema operativo al
 iniciar. Incluye español e inglés; los demás idiomas usan español como respaldo.
@@ -29,10 +45,27 @@ Los textos están en `assets/i18n/messages.csv` y las convenciones en `AGENTS.md
 ## Estructura
 
 - `scenes/`: escenas del proyecto.
-- `scripts/`: código GDScript.
+- `scripts/`: código GDScript; conducción, pista, cámara, vueltas y HUD en `scripts/race/`.
 - `assets/`: recursos y traducciones.
 - `tests/`: comprobaciones del proyecto.
 - `tools/`: instalación del motor, verificaciones y exportación.
+
+## Editar Gálvez 8
+
+La línea central editable está en `assets/tracks/galvez_8/centerline.tres`, usada
+por el `Path3D` de `scenes/race/galvez_8.tscn`. La forma se trazó a partir de la
+miniatura atribuida en `licenses/TRACK-MAPS.md`. No es un relevamiento topográfico.
+Abrí la escena de la pista, editá la curva y usá **Bake track geometry** en el
+inspector del nodo raíz. Guardá la escena; la malla y las colisiones quedan
+horneadas y no se regeneran al jugar. Para reconstruirla desde la curva fuente:
+
+```bash
+"$GODOT" --headless --path . --script res://tools/bake_track.gd
+```
+
+El horneado modifica la escena generada; guardá primero cualquier ajuste hecho
+allí. `CarTuning` concentra los parámetros de conducción. Las pruebas de carrera
+conducen una vuelta física completa y verifican controles, colisiones y reglas.
 
 ## Verificaciones y exportación
 

@@ -19,6 +19,7 @@ var _maps: Array[Texture2D] = []
 func _ready() -> void:
 	for track: Dictionary in RaceSetup.TRACKS:
 		_maps.append(load(track["map"]) as Texture2D)
+	RaceSetup.track_confirmed.connect(_on_track_confirmed)
 	resized.connect(_update_layout)
 	_update_layout()
 
@@ -53,6 +54,17 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		_:
 			return
 	get_viewport().set_input_as_handled()
+
+
+func _on_track_confirmed(track_id: String) -> void:
+	if track_id == "galvez_8":
+		_leaving = true
+		_start_race.call_deferred()
+
+
+func _start_race() -> void:
+	if get_tree().change_scene_to_file("res://scenes/race/race.tscn") != OK:
+		_leaving = false
 
 
 func _return_to_title() -> void:
@@ -117,7 +129,7 @@ func _draw_track(index: int) -> void:
 			Vector2(center - 24, arrow_y), Vector2(center + 24, arrow_y), Vector2(center, arrow_y + 17)
 		]), Color("bb2823"))
 		if RaceSetup.confirmed:
-			_text(tr("TRACK_CONFIRMED"), Vector2(center, 590), HUD_FONT, 15, Color("9e241d"), 244.0)
+			_text(tr("TRACK_UNAVAILABLE"), Vector2(center, 590), HUD_FONT, 14, Color("9e241d"), 244.0)
 
 
 func _draw_terrain(index: int, center: Vector2, active: bool) -> void:
