@@ -111,11 +111,11 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 func _on_car_confirmed(_car_id: String) -> void:
 	_leaving = true
-	_start_race.call_deferred()
+	_select_mode.call_deferred()
 
 
-func _start_race() -> void:
-	if get_tree().change_scene_to_file("res://scenes/race/race.tscn") != OK:
+func _select_mode() -> void:
+	if get_tree().change_scene_to_file("res://scenes/mode_selection.tscn") != OK:
 		_leaving = false
 
 

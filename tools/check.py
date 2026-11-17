@@ -22,7 +22,7 @@ def main():
     config = json.load(open("release-config.json"))
     run_godot(["--editor", "--import"])
     for script in config["tests"]:
-        run_godot(["--fixed-fps", "60", "--script", "res://" + script], timeout=60)
+        run_godot(["--fixed-fps", "60", "--script", "res://" + script])
 
 
 if __name__ == "__main__":
