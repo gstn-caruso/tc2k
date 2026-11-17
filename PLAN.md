@@ -13,8 +13,8 @@ implementadas; las decisiones indicadas como propuestas quedan abiertas a ajuste
 - Teclado como control principal, con cambios automáticos.
 - Un solo auto disponible por ahora.
 - Ya existen el título, el selector, `RaceSetup` y una vuelta contrarreloj jugable
-  en Gálvez 8 y Cabalén 3: auto de prototipo, cámara, pistas horneadas, progreso
-  continuo, pausa, reposición, resultados y récord por circuito. El Zonda sigue pendiente.
+  en Gálvez 8, Cabalén 3 y El Zonda: auto de prototipo, cámara, pistas horneadas,
+  progreso continuo, pausa, reposición, resultados y récord por circuito.
 - Tres pistas seleccionadas: Gálvez 8, Cabalén 3 y El Zonda.
 - Mantener la interfaz con i18n nativo de Godot, idioma del SO y español como
   respaldo, con catálogo adicional en inglés. Centralizar los textos en
@@ -155,8 +155,8 @@ un recurso `CarTuning`. La carrocería y las ruedas son hijos visuales del cuerp
 [CharacterBody3D](https://docs.godotengine.org/en/stable/classes/class_characterbody3d.html).
 
 El controlador aplica las diferencias entre asfalto y pasto; el agarre no queda
-delegado a la fricción de un material físico. Probar una pendiente suave antes
-de desarrollar el relieve de El Zonda. Si el prototipo demuestra que hace falta
+delegado a la fricción de un material físico. El Zonda prueba pendientes suaves
+y recuperación desde la banquina con colisión continua. Si el prototipo demuestra que hace falta
 una suspensión física más compleja, revisar el uso de `RigidBody3D` y su
 integración de fuerzas. `VehicleBody3D` no es una dependencia inicial, dadas sus
 limitaciones documentadas. [VehicleBody3D](https://docs.godotengine.org/en/stable/classes/class_vehiclebody3d.html).
@@ -252,12 +252,12 @@ geometría básica, antes de terminar el arte o construir los otros dos circuito
 
 | Hito / estado | Criterio para darlo por terminado |
 | --- | --- |
-| Auto y pista de pruebas: pendiente probar una pendiente | Teclado, aceleración, frenado, giro progresivo, pasto, pendiente y choques controlables. |
+| Auto y pista de pruebas: implementada | Teclado, aceleración, frenado, giro progresivo, pasto, pendientes suaves y choques controlables. |
 | Primera vuelta en Gálvez: implementada | Se entra desde el selector, se recorre un trazado cerrado, se registra una vuelta válida y se puede reintentar. |
 | Contrarreloj completo | Largada, tres vueltas, HUD, resultados y récord independiente por circuito. |
 | Sector visual terminado | Un sector fija materiales, resolución, iluminación y decoración que se puedan repetir. |
 | Cabalén 3: implementada | Trazado plano horneado, vuelta física verificada, minimapa y récord propio. |
-| El Zonda: pendiente | Comparte controlador y reglas; trazado, relieve y dificultad quedan por implementar. |
+| El Zonda: implementada | Trazado horneado con pendientes ilustrativas, rulo con puente, vuelta física y récord propio. |
 
 ## Criterios de validación
 
@@ -280,6 +280,8 @@ geometría básica, antes de terminar el arte o construir los otros dos circuito
   Mantener esas comprobaciones.
 - `tests/circuits.gd` completa una vuelta física en cada circuito adicional,
   comprueba el minimapa y verifica récords separados, reintentos y regreso al selector.
+  En El Zonda valida las colisiones de ambos niveles del puente y el regreso
+  desde la banquina en pendiente.
 - Mantener feature branches, PRs, i18n y releases SemVer con `.deb` y `.exe`
   después de cada merge a `main`.
 

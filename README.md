@@ -11,8 +11,8 @@ Importá `project.godot` desde Godot 4.7.2 y presioná **F6** para ejecutar la
 escena abierta o **F5** para iniciar el proyecto. `scenes/main.tscn` muestra el
 título Turismo Carretera 2K con la bandera argentina y espera **Enter**.
 Después aparece `scenes/track_selection.tscn`: **← / →** recorren las pistas,
-**Enter** inicia Gálvez 8 o Cabalén 3 y **Esc** regresa al título. El Zonda
-muestra «Próximamente» al confirmarlo: su escenario 3D todavía está pendiente.
+**Enter** inicia el circuito elegido y **Esc** regresa al título. Los tres
+circuitos tienen escenarios 3D jugables.
 
 Los circuitos son Oscar y Juan Gálvez, circuito 8 (baja), Oscar Cabalén,
 circuito 3 (media), y El Zonda–Eduardo Copello (alta). Las miniaturas conservan
@@ -25,9 +25,10 @@ en el sentido correcto, también por la banquina o el pasto. El auto tiene
 aceleración y dirección progresivas, frenado, una reducción suave de velocidad
 y agarre en el pasto y colisiones con los guardarraíles. El modelo y los edificios
 son arte de prototipo. Los trazados se basan en los mapas atribuidos; la anchura
-y escenografía son aproximadas. Gálvez y Cabalén son planos en esta entrega.
-Los récords son independientes por circuito. El modo de tres vueltas y el
-escenario de El Zonda siguen pendientes.
+y escenografía son aproximadas. Gálvez y Cabalén son planos; El Zonda incorpora
+pendientes suaves, el rulo con puente y un entorno árido con cerros. Sus alturas
+son ilustrativas. Los récords son independientes por circuito. El modo de tres
+vueltas sigue pendiente.
 
 | Acción | Teclas |
 | --- | --- |
@@ -57,7 +58,7 @@ Los textos están en `assets/i18n/messages.csv` y las convenciones en `AGENTS.md
 ## Editar los circuitos
 
 Las líneas centrales editables están en `assets/tracks/<id>/centerline.tres`,
-usadas por el `Path3D` de `scenes/race/<id>.tscn`: `galvez_8` y `cabalen_3`.
+usadas por el `Path3D` de `scenes/race/<id>.tscn`: `galvez_8`, `cabalen_3` y `el_zonda`.
 Las formas se trazaron a partir de las miniaturas atribuidas en
 `licenses/TRACK-MAPS.md`. No son relevamientos topográficos.
 Abrí la escena de la pista, editá la curva y usá **Bake track geometry** en el
@@ -67,12 +68,14 @@ horneadas y no se regeneran al jugar. Para reconstruirla desde la curva fuente:
 ```bash
 "$GODOT" --headless --path . --script res://tools/bake_track.gd
 "$GODOT" --headless --path . --script res://tools/bake_track.gd -- cabalen_3
+"$GODOT" --headless --path . --script res://tools/bake_track.gd -- el_zonda
 ```
 
 El horneado modifica la escena generada; guardá primero cualquier ajuste hecho
 allí. `CarTuning` concentra los parámetros de conducción. Las pruebas de carrera
 conducen vueltas físicas completas y verifican controles, colisiones, reglas,
-minimapas y aislamiento de los récords entre pistas.
+minimapas y aislamiento de los récords entre pistas. En El Zonda comprueban
+ambos niveles del puente y la recuperación desde la banquina en pendiente.
 
 ## Verificaciones y exportación
 

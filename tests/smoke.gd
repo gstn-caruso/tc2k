@@ -72,14 +72,6 @@ func _run() -> void:
 	assert(setup.selected_index == 0)
 	await _press(KEY_RIGHT)
 	assert(setup.selected_index == 1)
-	await _press(KEY_RIGHT)
-	assert(setup.selected_index == 2)
-	await _press(KEY_ENTER)
-	assert(setup.confirmed)
-	assert(current_scene.name == "TrackSelection")
-	await _press(KEY_LEFT)
-	assert(setup.selected_index == 1)
-	assert(not setup.confirmed)
 	await _press(KEY_ESCAPE)
 	await process_frame
 	assert(current_scene.name == "TitleScreen")
@@ -88,19 +80,16 @@ func _run() -> void:
 	assert(current_scene.name == "TrackSelection")
 	assert(setup.selected_index == 1)
 	await _press(KEY_LEFT)
-	await _press(KEY_ENTER)
-	await process_frame
-	assert(current_scene.name == "Race")
-	assert(current_scene.track.name == "Galvez8")
-	assert(current_scene.car is CharacterBody3D)
-	assert(current_scene.lap.route_length > 3000)
-	current_scene._back_to_selection()
-	await process_frame
-	await process_frame
-	await _press(KEY_RIGHT)
-	await _press(KEY_ENTER)
-	await process_frame
-	assert(current_scene.name == "Race" and current_scene.track_id == "cabalen_3")
-	assert(current_scene.track.name == "Cabalen3")
-	print("Smoke test passed: OS locale, Enter-only title, arrow navigation, unavailable Zonda, back navigation and playable Gálvez/Cabalén transitions.")
+	for index in 3:
+		if index > 0:
+			await _press(KEY_RIGHT)
+		assert(setup.selected_index == index)
+		await _press(KEY_ENTER)
+		await process_frame
+		assert(current_scene.name == "Race" and current_scene.track_id == setup.TRACKS[index]["id"])
+		assert(current_scene.car is CharacterBody3D and current_scene.lap.route_length > 3000)
+		current_scene._back_to_selection()
+		await process_frame
+		await process_frame
+	print("Smoke test passed: OS locale, Enter-only title, arrow navigation, back navigation and all three playable circuit transitions.")
 	quit()
