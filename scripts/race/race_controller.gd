@@ -5,6 +5,7 @@ extends Control
 enum State { COUNTDOWN, RACING, PAUSED, FINISHED }
 const RECORDS_PATH := "user://lap_records.cfg"
 var track_definition: Dictionary
+var car_definition: Dictionary
 var track_id: String
 var state := State.COUNTDOWN
 var countdown := 3.0
@@ -25,6 +26,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	var setup := get_node("/root/RaceSetup")
 	track_definition = setup.TRACKS[setup.selected_index]
+	car_definition = setup.CARS[setup.selected_car_index]
 	track_id = track_definition["id"]
 	if track_definition["scene"].is_empty():
 		_back_to_selection.call_deferred()
@@ -52,6 +54,8 @@ func _build_world() -> void:
 	car = ArcadeCar.new()
 	car.name = "Car"
 	car.track = track
+	car.model_id = car_definition["id"]
+	car.model_scene = load(car_definition["scene"]) as PackedScene
 	world.add_child(car)
 	camera = RaceCamera.new()
 	camera.name = "RaceCamera"

@@ -1,5 +1,5 @@
 extends SceneTree
-## Verify OS language, the Enter gate, keyboard browsing and circuit confirmation.
+## Verify OS language and the complete title → circuit → car → race flow.
 
 
 func _initialize() -> void:
@@ -40,6 +40,8 @@ func _run() -> void:
 		TranslationServer.set_locale(locale)
 		assert(tr("PRESS_ENTER") != "PRESS_ENTER")
 		assert(tr("SELECT_CIRCUIT") != "SELECT_CIRCUIT")
+		for key in ["SELECT_CAR", "PROTOTYPE_CAR", "FUEGO_LIVERY", "PROTOTYPE_LIVERY", "CAR_COUNT", "CAR_CONTROLS"]:
+			assert(tr(key) != key)
 	localization.apply_system_language()
 	assert(change_scene_to_file(ProjectSettings.get_setting("application/run/main_scene")) == OK)
 	await process_frame
@@ -63,6 +65,8 @@ func _run() -> void:
 	assert(setup.TRACKS[0]["id"] == "galvez_8")
 	assert(setup.TRACKS[1]["id"] == "cabalen_3")
 	assert(setup.TRACKS[2]["id"] == "el_zonda")
+	assert(setup.CARS.size() == 2 and setup.selected_car_index == 0)
+	assert(setup.CARS[0]["id"] == "renault_fuego" and setup.CARS[1]["id"] == "prototype")
 	for track: Dictionary in setup.TRACKS:
 		var map := load(track["map"]) as Texture2D
 		assert(map != null and map.get_width() > 0)
@@ -86,10 +90,51 @@ func _run() -> void:
 		assert(setup.selected_index == index)
 		await _press(KEY_ENTER)
 		await process_frame
-		assert(current_scene.name == "Race" and current_scene.track_id == setup.TRACKS[index]["id"])
-		assert(current_scene.car is CharacterBody3D and current_scene.lap.route_length > 3000)
-		current_scene._back_to_selection()
+		assert(current_scene.name == "CarSelection" and setup.confirmed)
+		var selection := current_scene
+		for frame in 420:
+			await process_frame
+		assert(current_scene == selection)
+		await _press(KEY_ENTER, true)
+		assert(current_scene == selection)
+		await _press(KEY_SPACE)
+		assert(current_scene == selection)
+		var original_car: int = setup.selected_car_index
+		await _press(KEY_LEFT)
+		assert(setup.selected_car_index == wrapi(original_car - 1, 0, setup.CARS.size()))
+		assert(current_scene._preview.scene_file_path == setup.CARS[setup.selected_car_index]["scene"])
+		await _press(KEY_RIGHT, true)
+		assert(setup.selected_car_index != original_car)
+		await _press(KEY_ESCAPE)
+		await process_frame
+		assert(current_scene.name == "TrackSelection" and setup.selected_index == index and not setup.confirmed)
+		await _press(KEY_ENTER)
+		await process_frame
+		assert(current_scene.name == "CarSelection" and setup.selected_car_index != original_car)
+		await _press(KEY_RIGHT)
+		assert(setup.selected_car_index == original_car)
+		for car_index in setup.CARS.size():
+			assert(setup.selected_car_index == car_index)
+			assert(current_scene._preview.scene_file_path == setup.CARS[car_index]["scene"])
+			await _press(KEY_KP_ENTER)
+			await process_frame
+			assert(current_scene.name == "Race" and current_scene.track_id == setup.TRACKS[index]["id"])
+			assert(current_scene.car is CharacterBody3D and current_scene.lap.route_length > 3000)
+			assert(current_scene.car.model_id == setup.CARS[car_index]["id"])
+			assert(current_scene.car._visual.scene_file_path == setup.CARS[car_index]["scene"])
+			current_scene._retry()
+			await process_frame
+			await process_frame
+			assert(current_scene.car.model_id == setup.CARS[car_index]["id"])
+			current_scene._back_to_selection()
+			await process_frame
+			await process_frame
+			await _press(KEY_ENTER)
+			await process_frame
+			assert(current_scene.name == "CarSelection" and setup.selected_car_index == car_index)
+			await _press(KEY_RIGHT)
+		await _press(KEY_ESCAPE)
 		await process_frame
 		await process_frame
-	print("Smoke test passed: OS locale, Enter-only title, arrow navigation, back navigation and all three playable circuit transitions.")
+	print("Smoke test passed: OS locale, Enter gates, keyboard model preview, wraparound, back navigation, both cars on all circuits and model persistence on retry.")
 	quit()

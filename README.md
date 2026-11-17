@@ -11,8 +11,17 @@ Importá `project.godot` desde Godot 4.7.2 y presioná **F6** para ejecutar la
 escena abierta o **F5** para iniciar el proyecto. `scenes/main.tscn` muestra el
 título Turismo Carretera 2K con la bandera argentina y espera **Enter**.
 Después aparece `scenes/track_selection.tscn`: **← / →** recorren las pistas,
-**Enter** inicia el circuito elegido y **Esc** regresa al título. Los tres
-circuitos tienen escenarios 3D jugables.
+**Enter** confirma el circuito y abre la selección de auto; **Esc** regresa al
+título. En `scenes/car_selection.tscn`, **← / →** eligen el modelo con una
+vista previa 3D giratoria, **Enter** inicia la carrera y **Esc** vuelve a los
+circuitos. Los tres circuitos tienen escenarios 3D jugables.
+
+Se puede elegir el **Renault Fuego**, con su decoración blanca y amarilla de
+Traverso, o el **Prototipo TC2K** azul y blanco. El Fuego se importó desde la
+carpeta Models del usuario; su procedencia y adaptación están documentadas en
+`licenses/CAR-MODELS.md`. Ambos modelos usan la misma conducción
+arcade y animan la dirección y la rodadura de las ruedas. La selección se
+conserva al reintentar y al volver a los circuitos durante la sesión.
 
 Los circuitos son Oscar y Juan Gálvez, circuito 8 (baja), Oscar Cabalén,
 circuito 3 (media), y El Zonda–Eduardo Copello (alta). Las miniaturas conservan
@@ -23,7 +32,7 @@ cronómetro, seguimiento continuo del recorrido, resultado, récord local y rein
 No hay puntos de paso obligatorios: se completa el circuito y se cruza la meta
 en el sentido correcto, también por la banquina o el pasto. El auto tiene
 aceleración y dirección progresivas, frenado, una reducción suave de velocidad
-y agarre en el pasto y colisiones con los guardarraíles. El modelo y los edificios
+y agarre en el pasto y colisiones con los guardarraíles. Los edificios
 son arte de prototipo. Los trazados se basan en los mapas atribuidos; la anchura
 y escenografía son aproximadas. Gálvez y Cabalén son planos; El Zonda incorpora
 pendientes suaves, el rulo con puente y un entorno árido con cerros. Sus alturas
@@ -51,6 +60,7 @@ Los textos están en `assets/i18n/messages.csv` y las convenciones en `AGENTS.md
 
 - `scenes/`: escenas del proyecto.
 - `scripts/`: código GDScript; conducción, pista, cámara, vueltas y HUD en `scripts/race/`.
+- `scenes/cars/` y `scripts/cars/`: modelos visuales compartidos entre el selector y la carrera.
 - `assets/`: recursos y traducciones.
 - `tests/`: comprobaciones del proyecto.
 - `tools/`: instalación del motor, verificaciones y exportación.
