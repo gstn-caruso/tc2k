@@ -3,8 +3,9 @@ extends Control
 ## First playable milestone: one timed lap, followed by results and keyboard retry.
 
 enum State { COUNTDOWN, RACING, PAUSED, FINISHED }
-const TRACK_ID := "galvez_8"
 const RECORDS_PATH := "user://lap_records.cfg"
+var track_definition: Dictionary
+var track_id: String
 var state := State.COUNTDOWN
 var countdown := 3.0
 var lap := LapTracker.new()
@@ -23,7 +24,9 @@ var _leaving := false
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	var setup := get_node("/root/RaceSetup")
-	if setup.TRACKS[setup.selected_index]["id"] != TRACK_ID:
+	track_definition = setup.TRACKS[setup.selected_index]
+	track_id = track_definition["id"]
+	if track_definition["scene"].is_empty():
 		_back_to_selection.call_deferred()
 		return
 	_build_world()
@@ -31,7 +34,7 @@ func _ready() -> void:
 	lap.route_length = track.path.curve.get_baked_length()
 	var records := ConfigFile.new()
 	if records.load(RECORDS_PATH) == OK:
-		best_time = maxf(0.0, float(records.get_value(TRACK_ID, "best_lap", 0.0)))
+		best_time = maxf(0.0, float(records.get_value(track_id, "best_lap", 0.0)))
 	car.reset_to(track.frame_at(-14.0))
 	_previous_position = car.global_position
 	camera.snap()
@@ -43,7 +46,7 @@ func _build_world() -> void:
 	var world := Node3D.new()
 	world.name = "World"
 	viewport.add_child(world)
-	track = (load("res://scenes/race/galvez_8.tscn") as PackedScene).instantiate() as CircuitTrack
+	track = (load(track_definition["scene"]) as PackedScene).instantiate() as CircuitTrack
 	world.add_child(track)
 	car = ArcadeCar.new()
 	car.name = "Car"
@@ -176,7 +179,7 @@ func _finish() -> void:
 		new_record = true
 		var records := ConfigFile.new()
 		records.load(RECORDS_PATH)
-		records.set_value(TRACK_ID, "best_lap", best_time)
+		records.set_value(track_id, "best_lap", best_time)
 		if records.save(RECORDS_PATH) != OK:
 			push_warning("Could not save lap record")
 

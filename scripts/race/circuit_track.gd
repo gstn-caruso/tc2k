@@ -6,6 +6,10 @@ extends Node3D
 
 const ROAD_WIDTH := 14.0
 const ROAD_SURFACE_HEIGHT := 0.05
+@export var ground_color := Color("71965e")
+@export var shoulder_color := Color("b1a37e")
+@export var rail_color := Color("508eaf")
+@export var foliage_color := Color("3d6d49")
 @export_tool_button("Bake track geometry") var bake_action: Callable = rebuild
 @onready var path: Path3D = $Centerline
 # Dummy/headless rendering cannot serialize MultiMesh server buffers. Keep the
@@ -95,7 +99,7 @@ func rebuild() -> void:
 	generated.name = "Generated"
 	add_child(generated)
 	_build_ground(generated)
-	_strip(generated, -11.5, 11.5, 0.015, Color("b1a37e"))
+	_strip(generated, -11.5, 11.5, 0.015, shoulder_color)
 	var asphalt := _strip(generated, -7.0, 7.0, ROAD_SURFACE_HEIGHT, Color("515761"))
 	asphalt.name = "Asphalt"
 	var road_body := StaticBody3D.new()
@@ -140,7 +144,7 @@ func _build_ground(parent: Node3D) -> void:
 	for x in range(-10, 10):
 		for z in range(-9, 9):
 			var p := Vector3(x * 95, -0.005, z * 95)
-			var color := Color("71965e").darkened(rng.randf_range(0, 0.09))
+			var color := ground_color.darkened(rng.randf_range(0, 0.09))
 			_quad(surface, p, p + Vector3(95, 0, 0), p + Vector3(0, 0, 95), p + Vector3(95, 0, 95), color)
 	_mesh(ground, surface.commit(), _material(Color.WHITE, true))
 
@@ -159,7 +163,7 @@ func _build_rails(parent: Node3D) -> void:
 		for side in [-1.0, 1.0]:
 			var p := a * Vector3(side * 18, 0, 0)
 			var q := b * Vector3(side * 18, 0, 0)
-			var color := Color("d9dfd9") if (i / 4) % 2 == 0 else Color("508eaf")
+			var color := Color("d9dfd9") if (i / 4) % 2 == 0 else rail_color
 			_quad(surface, p + Vector3.UP * 0.35, q + Vector3.UP * 0.35, p + Vector3.UP * 1.05, q + Vector3.UP * 1.05, color)
 			var collision := CollisionShape3D.new()
 			var box := BoxShape3D.new()
@@ -230,7 +234,7 @@ func _build_trees(parent: Node3D) -> void:
 		if p.y >= 0:
 			p.y = cone.height * 0.5 * scale_factor
 		var pose := Transform3D(Basis(Vector3.UP, rng.randf() * TAU).scaled(Vector3.ONE * scale_factor), p)
-		var color := Color("3d6d49").lightened(rng.randf_range(0, 0.18))
+		var color := foliage_color.lightened(rng.randf_range(0, 0.18))
 		tree_poses.append(pose)
 		tree_colors.append(color)
 		leaves.set_instance_transform(i, pose)

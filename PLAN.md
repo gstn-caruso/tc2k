@@ -13,8 +13,8 @@ implementadas; las decisiones indicadas como propuestas quedan abiertas a ajuste
 - Teclado como control principal, con cambios automáticos.
 - Un solo auto disponible por ahora.
 - Ya existen el título, el selector, `RaceSetup` y una vuelta contrarreloj jugable
-  en Gálvez 8: auto de prototipo, cámara, pista horneada, progreso continuo,
-  pausa, reposición, resultados y récord local. Los otros circuitos siguen pendientes.
+  en Gálvez 8 y Cabalén 3: auto de prototipo, cámara, pistas horneadas, progreso
+  continuo, pausa, reposición, resultados y récord por circuito. El Zonda sigue pendiente.
 - Tres pistas seleccionadas: Gálvez 8, Cabalén 3 y El Zonda.
 - Mantener la interfaz con i18n nativo de Godot, idioma del SO y español como
   respaldo, con catálogo adicional en inglés. Centralizar los textos en
@@ -256,7 +256,8 @@ geometría básica, antes de terminar el arte o construir los otros dos circuito
 | Primera vuelta en Gálvez: implementada | Se entra desde el selector, se recorre un trazado cerrado, se registra una vuelta válida y se puede reintentar. |
 | Contrarreloj completo | Largada, tres vueltas, HUD, resultados y récord independiente por circuito. |
 | Sector visual terminado | Un sector fija materiales, resolución, iluminación y decoración que se puedan repetir. |
-| Cabalén y El Zonda | Comparten controlador y reglas; sus trazados, relieves y dificultad quedan ajustados. |
+| Cabalén 3: implementada | Trazado plano horneado, vuelta física verificada, minimapa y récord propio. |
+| El Zonda: pendiente | Comparte controlador y reglas; trazado, relieve y dificultad quedan por implementar. |
 
 ## Criterios de validación
 
@@ -277,6 +278,8 @@ geometría básica, antes de terminar el arte o construir los otros dos circuito
   la navegación. `tests/race.gd` prueba teclado, pausa/foco, reposición, choques,
   progreso continuo y una vuelta física con salida al pasto y recuperación.
   Mantener esas comprobaciones.
+- `tests/circuits.gd` completa una vuelta física en cada circuito adicional,
+  comprueba el minimapa y verifica récords separados, reintentos y regreso al selector.
 - Mantener feature branches, PRs, i18n y releases SemVer con `.deb` y `.exe`
   después de cada merge a `main`.
 

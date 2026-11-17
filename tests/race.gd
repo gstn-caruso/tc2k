@@ -1,6 +1,8 @@
 extends SceneTree
 ## Real physics/input integration plus continuous lap progress and reset rules.
 
+const LapDriver = preload("res://tests/lap_driver.gd")
+
 func _initialize() -> void:
 	_run.call_deferred()
 
@@ -213,43 +215,10 @@ func _run() -> void:
 	race = current_scene as RaceController
 	car = race.car
 	await _ticks(185)
-	# Drive the whole physical circuit with a steering/pedal feedback controller.
-	# This samples the route for test inputs only; the production car has no rail.
-	var max_error := 0.0
-	var frames := 0
-	var grass_ticks := 0
-	while race.state == RaceController.State.RACING and frames < 24000:
-		var offset := race.track.nearest_distance(car.global_position)
-		# Leave and rejoin the asphalt in the first straight, missing old gates.
-		var grass_offset := 11.0 * smoothstep(20, 100, offset) * (1.0 - smoothstep(200, 300, offset))
-		var target := race.track.frame_at(offset + maxf(9, car.speed * 0.42)) * Vector3(grass_offset, 0, 0)
-		var wanted := (target - car.global_position).normalized()
-		var angle := (-car.global_basis.z).signed_angle_to(wanted, Vector3.UP)
-		var turn := clampf(-angle * 3, -1, 1)
-		Input.action_press("drive_left", maxf(-turn, 0))
-		Input.action_press("drive_right", maxf(turn, 0))
-		var curvature := 0.001
-		for sample in [0.0, 20.0, 40.0, 65.0]:
-			var here := -race.track.frame_at(offset + sample).basis.z
-			var ahead := -race.track.frame_at(offset + sample + 20).basis.z
-			curvature = maxf(curvature, absf(here.signed_angle_to(ahead, Vector3.UP)) / 20)
-		var target_speed := clampf(sqrt(6.0 / curvature), 10, 44)
-		if offset < 340:
-			target_speed = minf(target_speed, 26.0)
-		Input.action_press("drive_accelerate", 1.0 if car.speed < target_speed else 0.0)
-		Input.action_press("drive_brake", 1.0 if car.speed > target_speed + 1.0 else 0.0)
-		var nearest := race.track.path.curve.get_closest_point(car.global_position)
-		max_error = maxf(max_error, Vector2(nearest.x - car.global_position.x, nearest.z - car.global_position.z).length())
-		if not car.on_asphalt:
-			grass_ticks += 1
-		await physics_frame
-		frames += 1
-	_release_driving()
-	await process_frame
-	print("Physical lap: ", frames, " ticks; time=", race.lap.elapsed, "; progress=", race.lap.progress, "; max line error=", max_error, "; grass ticks=", grass_ticks)
+	var result := await LapDriver.drive(self, race, true)
 	assert(race.state == RaceController.State.FINISHED and not race.lap.invalid)
 	assert(race.lap.elapsed > 60 and race.lap.elapsed < 240)
-	assert(max_error < 14 and grass_ticks > 90)
+	assert(result.max_error < 14 and result.grass_ticks > 90)
 	assert(race.new_record and race.best_time == race.lap.elapsed)
 	# Results retry works and records survive a scene reload.
 	var record := race.best_time

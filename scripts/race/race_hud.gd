@@ -8,11 +8,24 @@ const WHITE := Color("f8f3dc")
 const INK := Color("0e1d2c")
 var race: RaceController
 var _layout := Transform2D.IDENTITY
+var _map_transform := Transform2D.IDENTITY
 
 
 func _ready() -> void:
 	race = get_parent() as RaceController
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_fit_map.call_deferred()
+
+
+func _fit_map() -> void:
+	if not race.track:
+		return
+	var points := race.track.path.curve.get_baked_points()
+	var bounds := Rect2(Vector2(points[0].x, points[0].z), Vector2.ZERO)
+	for point in points:
+		bounds = bounds.expand(Vector2(point.x, point.z))
+	var factor := 159.0 / maxf(bounds.size.x, bounds.size.y)
+	_map_transform = Transform2D(0, Vector2.ONE * factor, 0, Vector2(847.5, 585.5) - bounds.get_center() * factor)
 
 
 func _process(_delta: float) -> void:
@@ -34,7 +47,7 @@ func _draw() -> void:
 	draw_set_transform_matrix(_layout)
 	draw_rect(Rect2(0, 0, 960, 76), Color(0.035, 0.07, 0.11, 0.92))
 	draw_rect(Rect2(0, 74, 960, 3), GOLD)
-	_text("GÁLVEZ · " + tr("CIRCUIT_8"), Vector2(22, 29), 22, WHITE, TITLE)
+	_text(race.track_definition["hud_name"] + " · " + tr(race.track_definition["variant"]), Vector2(22, 29), 22, WHITE, TITLE)
 	_text(tr("TIME_TRIAL_ONE_LAP"), Vector2(22, 57), 13, Color("92d0ec"))
 	_text(tr("LAP_TIME"), Vector2(469, 26), 13, Color("92d0ec"))
 	_text(time_text(race.lap.elapsed), Vector2(466, 60), 27, GOLD)
@@ -90,15 +103,15 @@ func _draw_map() -> void:
 	for point in points:
 		polyline.append(_map_point(point))
 	draw_polyline(polyline, Color("dedfd2"), 3.0, true)
-	draw_circle(_map_point(race.lap.finish_line.origin), 4, GOLD)
-	var car := _map_point(race.car.global_position)
+	draw_circle(_map_point(race.track.to_local(race.lap.finish_line.origin)), 4, GOLD)
+	var car := _map_point(race.track.to_local(race.car.global_position))
 	var direction := Vector2(-race.car.global_basis.z.x, -race.car.global_basis.z.z).normalized()
 	var side := Vector2(-direction.y, direction.x)
 	draw_colored_polygon(PackedVector2Array([car + direction * 7, car - direction * 4 + side * 4, car - direction * 4 - side * 4]), Color("7de4ff"))
 
 
 func _map_point(point: Vector3) -> Vector2:
-	return Vector2(770, 513) + Vector2(point.x + 550, point.z + 380) * 0.153
+	return _map_transform * Vector2(point.x, point.z)
 
 
 func _overlay(title: String) -> void:
