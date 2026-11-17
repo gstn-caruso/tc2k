@@ -29,3 +29,15 @@ línea central, se eligió una escala y anchura de prototipo y se generaron asfa
 banquinas y guardarraíles. Las alturas y la escenografía son ilustrativas; no
 representan un levantamiento ni una reproducción exacta del autódromo.
 La licencia de esta adaptación es independiente de la del código del juego.
+
+## Trazado 3D de Cabalén 3
+
+`assets/tracks/cabalen_3/centerline.tres` adapta a mano el recorrido del circuito
+3 del mapa `cabalen_3.svg`, de Gustavo Girardelli y colaboradores de OpenStreetMap.
+La curva y las superficies derivadas en `scenes/race/cabalen_3.tscn` conservan
+[CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/). Se seleccionó
+el recorrido largo, se suavizó la línea central y se ajustó a unos 4045 metros;
+las anchuras, alturas y escenografía son de prototipo. El recorrido y la longitud
+se contrastaron con el [plano de TC2000 de 2017](https://www.tc2000.com.ar/archivos/carp-prev-tc2000-cordoba-2017.pdf).
+No es un relevamiento topográfico. La licencia de la adaptación es independiente
+de la del código del juego.

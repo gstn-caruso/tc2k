@@ -56,8 +56,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	get_viewport().set_input_as_handled()
 
 
-func _on_track_confirmed(track_id: String) -> void:
-	if track_id == "galvez_8":
+func _on_track_confirmed(_track_id: String) -> void:
+	if not RaceSetup.TRACKS[RaceSetup.selected_index]["scene"].is_empty():
 		_leaving = true
 		_start_race.call_deferred()
 
