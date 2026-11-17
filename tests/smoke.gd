@@ -92,6 +92,6 @@ func _run() -> void:
 	assert(current_scene.name == "Race")
 	assert(current_scene.track.name == "Galvez8")
 	assert(current_scene.car is CharacterBody3D)
-	assert(current_scene.track.gates().size() > 30)
+	assert(current_scene.lap.route_length > 3000)
 	print("Smoke test passed: OS locale, Enter-only title, arrow navigation, unavailable tracks, back navigation and playable Gálvez transition.")
 	quit()

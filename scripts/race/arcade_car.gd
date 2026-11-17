@@ -37,11 +37,12 @@ func _physics_process(delta: float) -> void:
 	if brake > 0.0:
 		longitudinal = move_toward(longitudinal, 0.0, tuning.braking * brake * delta)
 	elif throttle > 0.0:
-		longitudinal += tuning.acceleration * throttle * (1.0 - 0.55 * longitudinal / tuning.top_speed) * delta
+		if longitudinal < maximum:
+			longitudinal = minf(maximum, longitudinal + tuning.acceleration * throttle * (1.0 - 0.55 * longitudinal / tuning.top_speed) * delta)
 	else:
 		longitudinal = move_toward(longitudinal, 0.0, (0.7 + longitudinal * 0.022) * delta)
 	if longitudinal > maximum:
-		longitudinal = move_toward(longitudinal, maximum, 8.0 * delta)
+		longitudinal = move_toward(longitudinal, maximum, tuning.grass_deceleration * delta)
 	longitudinal = minf(longitudinal, tuning.top_speed)
 	var grip := tuning.grip if on_asphalt else tuning.grass_grip
 	var steering_angle := lerpf(0.5, 0.11, clampf(longitudinal / tuning.top_speed, 0, 1))

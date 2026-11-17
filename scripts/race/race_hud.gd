@@ -90,8 +90,7 @@ func _draw_map() -> void:
 	for point in points:
 		polyline.append(_map_point(point))
 	draw_polyline(polyline, Color("dedfd2"), 3.0, true)
-	var next := race.lap.gates[race.lap.next_gate].origin
-	draw_circle(_map_point(next), 4, GOLD)
+	draw_circle(_map_point(race.lap.finish_line.origin), 4, GOLD)
 	var car := _map_point(race.car.global_position)
 	var direction := Vector2(-race.car.global_basis.z.x, -race.car.global_basis.z.z).normalized()
 	var side := Vector2(-direction.y, direction.x)

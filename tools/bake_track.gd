@@ -17,5 +17,5 @@ func _bake() -> void:
 	var scene := PackedScene.new()
 	assert(scene.pack(track) == OK)
 	assert(ResourceSaver.save(scene, "res://scenes/race/galvez_8.tscn") == OK)
-	print("Baked Gálvez 8: ", path.curve.get_baked_length(), " m, ", track.gate_distances.size(), " ordered gates")
+	print("Baked Gálvez 8: ", path.curve.get_baked_length(), " m")
 	quit()

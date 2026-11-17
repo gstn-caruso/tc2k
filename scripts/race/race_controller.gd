@@ -27,8 +27,8 @@ func _ready() -> void:
 		_back_to_selection.call_deferred()
 		return
 	_build_world()
-	lap.gates = track.gates()
-	lap.half_width = track.ROAD_WIDTH * 0.5 + 1.5
+	lap.finish_line = track.global_transform * track.frame_at(0.0)
+	lap.route_length = track.path.curve.get_baked_length()
 	var records := ConfigFile.new()
 	if records.load(RECORDS_PATH) == OK:
 		best_time = maxf(0.0, float(records.get_value(TRACK_ID, "best_lap", 0.0)))
@@ -93,9 +93,10 @@ func _physics_process(delta: float) -> void:
 			state = State.RACING
 			car.driving_enabled = true
 	elif state == State.RACING:
-		lap.advance(_previous_position, car.global_position, delta)
+		var distance := track.nearest_distance(car.global_position)
+		lap.advance(_previous_position, car.global_position, delta, distance)
 		_previous_position = car.global_position
-		var tangent := -track.frame_at(track.nearest_distance(car.global_position)).basis.z
+		var tangent := -track.frame_at(distance).basis.z
 		wrong_way = car.speed > 3 and (-car.global_basis.z).dot(tangent) < -0.3
 		if lap.finished:
 			_finish()
@@ -160,9 +161,10 @@ func reset_car() -> void:
 	if state != State.RACING:
 		return
 	lap.invalid = true
-	var distance := track.gate_distances[lap.last_gate] + 3.0 if lap.last_gate >= 0 else -14.0
+	var distance := track.nearest_distance(car.global_position) if lap.started else -14.0
 	car.reset_to(track.frame_at(distance))
 	_previous_position = car.global_position
+	lap.relocate(track.nearest_distance(car.global_position))
 	camera.snap()
 
 
