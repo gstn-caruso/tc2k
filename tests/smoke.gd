@@ -85,5 +85,13 @@ func _run() -> void:
 	await process_frame
 	assert(current_scene.name == "TrackSelection")
 	assert(setup.selected_index == 2)
-	print("Smoke test passed: OS locale, Enter-only title, arrow navigation, track confirmation and back navigation.")
+	await _press(KEY_LEFT)
+	await _press(KEY_LEFT)
+	await _press(KEY_ENTER)
+	await process_frame
+	assert(current_scene.name == "Race")
+	assert(current_scene.track.name == "Galvez8")
+	assert(current_scene.car is CharacterBody3D)
+	assert(current_scene.track.gates().size() > 30)
+	print("Smoke test passed: OS locale, Enter-only title, arrow navigation, unavailable tracks, back navigation and playable Gálvez transition.")
 	quit()
