@@ -36,20 +36,24 @@ Los textos están en `assets/i18n/messages.csv` y las convenciones en `AGENTS.md
 
 ## Verificaciones y exportación
 
-Se necesita Python 3.10 o posterior. Estos comandos descargan el editor oficial
-y la plantilla Linux, verificando sus sumas SHA-512:
+Se necesita Python 3.11 o posterior y `dpkg-deb`. Estos comandos descargan el
+editor oficial y las plantillas Linux/Windows, verificando sus sumas SHA-512:
 
 ```bash
 python3 tools/install_godot.py
 export GODOT="$HOME/.cache/godot-release/4.7.2/godot"
 export GODOT_RELEASE_TEMPLATE="$HOME/.cache/godot-release/4.7.2/linux_release.x86_64"
+export GODOT_WINDOWS_RELEASE_TEMPLATE="$HOME/.cache/godot-release/4.7.2/windows_release_x86_64.exe"
 python3 -m unittest discover -s tools -p 'test_*.py'
 python3 tools/check.py
 python3 tools/build_release.py --version 0.1.0
 ```
 
-La exportación crea un ZIP para Linux x86_64 en `build/` y comprueba que el
-ejecutable arranque. Los archivos generados, las credenciales y la caché de
+La exportación deja en `build/release/` un instalador `.deb` para Linux amd64,
+un ejecutable `.exe` para Windows x86_64, ZIPs portables con licencias y
+`SHA256SUMS.txt`. Comprueba el arranque Linux, extrae y ejecuta el paquete Debian
+y valida el formato del ejecutable Windows. CI también lo ejecuta en Windows.
+Los archivos generados, las credenciales y la caché de
 Godot quedan fuera del repositorio. Los archivos `.uid`, `.import` y las
 traducciones `.translation` se versionan para permitir una primera importación
 sin referencias faltantes.
@@ -58,11 +62,19 @@ sin referencias faltantes.
 
 Repositorio privado: <https://github.com/gstn-caruso/tc2k>.
 
-Las pull requests ejecutan las verificaciones y una exportación Linux. Usá
+Las pull requests verifican el juego y exportan ambos sistemas. Usá
 títulos de [Conventional Commits](https://www.conventionalcommits.org/):
-`feat: ...`, `fix: ...`, `docs: ...`. Los cambios `feat`, `fix`, `perf`, `revert`
-y los cambios incompatibles que llegan a `main` generan versiones SemVer y una
-release con el ZIP y sus checksums. `chore`, `docs` y `ci` no generan releases.
+`feat: ...`, `fix: ...`, `docs: ...`. Cada merge a `main` genera una release:
+
+- Primera versión: `0.1.0`.
+- `!` o `BREAKING CHANGE:`: incremento major, incluso antes de `1.0.0`.
+- `feat`: incremento minor.
+- Los demás cambios, incluidos `fix`, `docs`, `chore` y `ci`: incremento patch.
+
+Los tags `vMAJOR.MINOR.PATCH` determinan la versión. Los reintentos reutilizan
+el tag del mismo commit y conservan las releases publicadas. El flujo encola
+los merges, verifica Linux y Windows y publica los artefactos con sus checksums
+después de que todas las comprobaciones pasen.
 
 No se ha seleccionado una licencia para el proyecto. Las licencias del motor
 y sus dependencias se conservan por separado; ver `THIRD_PARTY_NOTICES.md`.

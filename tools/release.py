@@ -18,14 +18,12 @@ def change_type(message):
         return "major"
     if header[1] == "feat":
         return "minor"
-    if header[1] in ("fix", "perf", "revert"):
-        return "patch"
-    return None
+    return "patch"
 
 
 def next_version(previous, messages, initial="0.1.0"):
     changes = [change_type(message) for message in messages]
-    if not any(changes):
+    if not messages:
         return ""
     if not previous:
         return initial
@@ -54,14 +52,18 @@ def main():
     config = json.loads(Path("release-config.json").read_text())
     tags = [tag for tag in git("tag", "--merged", "HEAD").splitlines() if TAG.fullmatch(tag)]
     previous = max(tags, key=lambda tag: tuple(map(int, TAG.fullmatch(tag).groups())), default="")
-    revision = f"{previous}..HEAD" if previous else "HEAD"
+    # An existing tag on this exact commit identifies a rerun, not a new version.
+    tagged_head = bool(previous and git("rev-parse", previous + "^{commit}") == git("rev-parse", "HEAD"))
+    earlier = [tag for tag in tags if tag != previous]
+    notes_base = max(earlier, key=lambda tag: tuple(map(int, TAG.fullmatch(tag).groups())), default="") if tagged_head else previous
+    revision = f"{notes_base}..HEAD" if notes_base else "HEAD"
     messages = [message.strip() for message in git("log", "--format=%B%x00", revision).split("\x00") if message.strip()]
-    version = next_version(previous, messages, config["initial_version"])
+    version = previous.removeprefix("v") if tagged_head else next_version(previous, messages, config["initial_version"])
     build = Path("build")
     build.mkdir(exist_ok=True)
     lines = [f"# {config['title']} v{version}", "", "## Changes", ""]
-    lines.extend(f"- {message.splitlines()[0]}" for message in reversed(messages) if change_type(message))
-    lines += ["", "## Download", "", "Linux x86_64: extract the ZIP and run the executable. No Godot installation is needed.", "", config.get("summary", "See the changes above for the features included in this release."), ""]
+    lines.extend(f"- {message.splitlines()[0]}" for message in reversed(messages))
+    lines += ["", "## Download", "", "Linux x86_64: install the .deb or extract the portable ZIP.", "Windows x86_64: run the .exe; the Windows ZIP also includes third-party notices.", "No Godot installation is needed. Verify downloads with SHA256SUMS.txt.", "", config.get("summary", "See the changes above for the features included in this release."), ""]
     (build / "release-notes.md").write_text("\n".join(lines))
     print(f"Release version: {version or 'none (no releasable changes)'}")
     if args.github_output:
