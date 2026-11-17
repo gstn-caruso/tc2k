@@ -1,6 +1,11 @@
 # Godot generated files and editor state.
 .godot/
+.mono/
 export_credentials.cfg
+*.keystore
+*.p12
+*.pfx
+mono_crash.*.json
 
 # Local tooling, credentials and exports.
 .env
@@ -9,8 +14,18 @@ export_credentials.cfg
 .venv/
 .idea/
 .vscode/
+.vs/
+*.csproj.user
 .DS_Store
 Thumbs.db
 build/
+exports/
+dist/
 __pycache__/
 *.pyc
+
+# Godot source metadata and imported translation catalogs belong in Git.
+!*.uid
+!*.import
+!*.translation
+.import/

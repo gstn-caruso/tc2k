@@ -3,7 +3,11 @@
   "slug": "tc2k",
   "initial_version": "0.1.0",
   "godot_version": "4.7.2",
-  "export_preset": "Linux",
+  "export_presets": {
+    "linux": "Linux",
+    "windows": "Windows"
+  },
+  "maintainer": "Gastón Caruso <gstn.caruso@gmail.com>",
   "tests": [
     "tests/smoke.gd"
   ],

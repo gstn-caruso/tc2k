@@ -6,6 +6,18 @@
 - Subir los cambios a la feature branch e integrarlos a `main` mediante pull requests.
 - No hacer commits ni pushes directamente sobre `main`.
 
+## Releases
+
+- Cada merge a `main` publica una release del juego, incluidos cambios de documentación o CI.
+- Usar títulos de PR de Conventional Commits: `!` o `BREAKING CHANGE:` incrementa
+  major, `feat` incrementa minor y los demás cambios incrementan patch.
+- La primera release es `0.1.0`. Los tags `vMAJOR.MINOR.PATCH` son la referencia;
+  un reintento conserva la versión y no modifica una release ya publicada.
+- Generar `.deb` para Linux amd64 y `.exe` para Windows x86_64, además de ZIPs
+  portables con licencias y `SHA256SUMS.txt`.
+- Publicar solo después de verificar el juego, el paquete Debian y el arranque
+  del ejecutable Windows en un runner Windows.
+
 ## Interfaz e idiomas
 
 - Usar el sistema nativo de i18n de Godot para toda la interfaz.
