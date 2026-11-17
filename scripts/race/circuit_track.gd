@@ -5,10 +5,9 @@ extends Node3D
 ## Runtime only samples the route; it never rebuilds meshes or drives the car along it.
 
 const ROAD_WIDTH := 14.0
-const GATE_SPACING := 85.0
+const ROAD_SURFACE_HEIGHT := 0.05
 @export_tool_button("Bake track geometry") var bake_action: Callable = rebuild
 @onready var path: Path3D = $Centerline
-var gate_distances: PackedFloat32Array = []
 # Dummy/headless rendering cannot serialize MultiMesh server buffers. Keep the
 # source transforms as scene data so headless and editor bakes agree visually.
 @export_storage var tree_poses: Array[Transform3D] = []
@@ -16,10 +15,6 @@ var gate_distances: PackedFloat32Array = []
 
 
 func _ready() -> void:
-	gate_distances.clear()
-	var count := ceili(path.curve.get_baked_length() / GATE_SPACING)
-	for i in count:
-		gate_distances.append(float(i) * path.curve.get_baked_length() / count)
 	if has_node("Generated/Trees"):
 		var trees := get_node("Generated/Trees") as MultiMeshInstance3D
 		for i in tree_poses.size():
@@ -44,13 +39,6 @@ func is_on_road(point: Vector3) -> bool:
 
 func nearest_distance(point: Vector3) -> float:
 	return path.curve.get_closest_offset(to_local(point))
-
-
-func gates() -> Array[Transform3D]:
-	var result: Array[Transform3D] = []
-	for distance in gate_distances:
-		result.append(global_transform * frame_at(distance))
-	return result
 
 
 func _material(color: Color, vertex_color := false) -> StandardMaterial3D:
@@ -108,7 +96,7 @@ func rebuild() -> void:
 	add_child(generated)
 	_build_ground(generated)
 	_strip(generated, -11.5, 11.5, 0.015, Color("b1a37e"))
-	var asphalt := _strip(generated, -7.0, 7.0, 0.05, Color("515761"))
+	var asphalt := _strip(generated, -7.0, 7.0, ROAD_SURFACE_HEIGHT, Color("515761"))
 	asphalt.name = "Asphalt"
 	var road_body := StaticBody3D.new()
 	road_body.name = "RoadCollision"
@@ -116,6 +104,8 @@ func rebuild() -> void:
 	var road_shape := CollisionShape3D.new()
 	road_shape.shape = asphalt.mesh.create_trimesh_shape()
 	(road_shape.shape as ConcavePolygonShape3D).backface_collision = true
+	# Raise only the visual road to avoid z-fighting; collision meets the grass.
+	road_shape.position.y = -ROAD_SURFACE_HEIGHT
 	road_body.add_child(road_shape)
 	_strip(generated, -8.1, -7.0, 0.065, Color("c43f34"), true)
 	_strip(generated, 7.0, 8.1, 0.065, Color("c43f34"), true)

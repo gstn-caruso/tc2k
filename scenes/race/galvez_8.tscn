@@ -2098,6 +2098,7 @@ mesh = SubResource("ArrayMesh_rmt60")
 [node name="RoadCollision" type="StaticBody3D" parent="Generated" unique_id=2083682665]
 
 [node name="@CollisionShape3D@6" type="CollisionShape3D" parent="Generated/RoadCollision" unique_id=1314359318]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
 shape = SubResource("ConcavePolygonShape3D_sv0ns")
 
 [node name="@MeshInstance3D@7" type="MeshInstance3D" parent="Generated" unique_id=1192179601]

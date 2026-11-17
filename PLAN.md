@@ -13,7 +13,7 @@ implementadas; las decisiones indicadas como propuestas quedan abiertas a ajuste
 - Teclado como control principal, con cambios automáticos.
 - Un solo auto disponible por ahora.
 - Ya existen el título, el selector, `RaceSetup` y una vuelta contrarreloj jugable
-  en Gálvez 8: auto de prototipo, cámara, pista horneada, controles ordenados,
+  en Gálvez 8: auto de prototipo, cámara, pista horneada, progreso continuo,
   pausa, reposición, resultados y récord local. Los otros circuitos siguen pendientes.
 - Tres pistas seleccionadas: Gálvez 8, Cabalén 3 y El Zonda.
 - Mantener la interfaz con i18n nativo de Godot, idioma del SO y español como
@@ -46,9 +46,9 @@ los tiempos con un solo auto.
 | Cámara | Cámara 3D elevada y oblicua, con seguimiento del auto y perspectiva. |
 | Controles | Teclado: WASD o flechas; cambios automáticos. |
 | Largada | Cuenta regresiva de tres segundos. |
-| Fuera del asfalto | Menor velocidad y agarre. |
+| Fuera del asfalto | Reducción suave de velocidad y agarre que permita volver a la pista. |
 | Choques | Pérdida de velocidad y una respuesta visual o sonora clara. |
-| Atajos | Puntos de control obligatorios para validar cada vuelta. |
+| Vuelta válida | Recorrer el circuito y cruzar la meta en el sentido correcto, sin puntos de paso obligatorios. |
 | Pantalla | Velocidad, vuelta actual, cronómetro y mejor tiempo. |
 | Resultado | Tiempo total, mejor vuelta y opción de reintentar. |
 | Progreso | Récord independiente para cada pista. |
@@ -65,7 +65,7 @@ los tiempos con un solo auto.
 - Probar una tendencia moderada al subviraje como decisión de diseño: al
   exceder el agarre, el auto gira menos de lo que pide el jugador.
 
-La prioridad es que completar una vuelta limpia resulte entretenido y que el
+La prioridad es que completar una vuelta resulte entretenido y que el
 jugador pueda reconocer dónde gana o pierde tiempo.
 
 ## Teclado e InputMap
@@ -122,7 +122,7 @@ Race (Control)
 │           │   ├── Sectors
 │           │   ├── Collisions
 │           │   ├── Spawn (Marker3D)
-│           │   └── Checkpoints (Area3D)
+│           │   └── Centerline (Path3D)
 │           ├── Car (CharacterBody3D)
 │           ├── CameraRig (Node3D)
 │           │   └── Camera3D
@@ -134,7 +134,7 @@ Race (Control)
 
 - `RaceController`: largada, estados de carrera, vueltas, cronómetro y resultados.
 - `Car`: movimiento, agarre, frenado y respuesta a choques.
-- `Track`: geometría, superficies, largada y puntos de control.
+- `Track`: geometría, superficies, largada y referencia continua del recorrido.
 - `HUD`: presenta datos de carrera y textos traducibles, a partir de señales.
 - `RaceSetup`: conserva el identificador elegido entre pantallas, sin guardar
   referencias a nodos 3D que pueden liberarse al reiniciar.
@@ -197,7 +197,7 @@ en un archivo de trabajo, con sectores separados; verificar orientación y
 escala al importar.
 
 En el flujo Blender, exportar `.glb` y usar una escena `.tscn` propia como contenedor para scripts,
-superficies y checkpoints. Así, reexportar la geometría conserva la lógica
+superficies y referencia del recorrido. Así, reexportar la geometría conserva la lógica
 agregada en Godot. Separar tres niveles de escenario:
 
 - Pista transitable: asfalto, banquinas, curvas y pendientes con colisión continua.
@@ -260,12 +260,13 @@ geometría básica, antes de terminar el arte o construir los otros dos circuito
 
 ## Criterios de validación
 
-- Validar checkpoints ordenados y cruce de meta en la dirección correcta.
-  Probar cruces en sentido contrario, atajos y cruces repetidos para que no
-  regalen vueltas.
-- Comprobar choques y paso por checkpoints a la máxima velocidad del prototipo.
+- Validar el progreso continuo y el cruce de meta en la dirección correcta.
+  Salirse al pasto o cortar una curva no debe dejar la vuelta trabada. Probar
+  retrocesos, cruces repetidos y saltos de sector para que no regalen vueltas.
+- Comprobar choques y cruce de meta a la máxima velocidad del prototipo, también
+  por el pasto dentro de los guardarraíles.
 - Comprobar que reiniciar o reubicar el auto no conserve velocidad incorrecta ni
-  duplique un cruce de meta. La reposición no debe permitir saltar checkpoints.
+  duplique un cruce de meta. Reubicar en la pista más cercana sin sumar progreso.
 - Probar WASD y flechas, W+A/D, W+S, A+D, soltar la dirección en plena curva,
   pérdida de foco, pausa y regreso a menús, sin necesitar mouse.
 - Comparar el manejo a 30, 60 y 144 FPS de renderizado, manteniendo constante la
@@ -274,7 +275,8 @@ geometría básica, antes de terminar el arte o construir los otros dos circuito
   de Linux y otra de Windows, además de las pruebas headless de lógica.
 - `tests/smoke.gd` verifica el acceso a Gálvez 3D desde el selector y conserva
   la navegación. `tests/race.gd` prueba teclado, pausa/foco, reposición, choques,
-  controles direccionales y una vuelta física completa. Mantener esas comprobaciones.
+  progreso continuo y una vuelta física con salida al pasto y recuperación.
+  Mantener esas comprobaciones.
 - Mantener feature branches, PRs, i18n y releases SemVer con `.deb` y `.exe`
   después de cada merge a `main`.
 

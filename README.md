@@ -19,17 +19,19 @@ circuito 3 (media), y El Zonda–Eduardo Copello (alta). Las miniaturas conserva
 las formas de los mapas de referencia; los detalles de terreno son ilustrativos.
 
 La primera pista permite completar **una vuelta contrarreloj**: cuenta regresiva,
-cronómetro, 45 controles de paso en orden, resultado, récord local y reintento.
-El auto tiene aceleración y dirección progresivas, frenado, menor agarre en el
-pasto y colisiones con los guardarraíles. El modelo y los edificios son arte de
-prototipo. La anchura y escala del trazado son aproximadas; Gálvez es plano en
+cronómetro, seguimiento continuo del recorrido, resultado, récord local y reintento.
+No hay puntos de paso obligatorios: se completa el circuito y se cruza la meta
+en el sentido correcto, también por la banquina o el pasto. El auto tiene
+aceleración y dirección progresivas, frenado, una reducción suave de velocidad
+y agarre en el pasto y colisiones con los guardarraíles. El modelo y los edificios
+son arte de prototipo. La anchura y escala del trazado son aproximadas; Gálvez es plano en
 esta entrega. El modo de tres vueltas y los otros dos escenarios siguen pendientes.
 
 | Acción | Teclas |
 | --- | --- |
 | Acelerar / frenar | W / S o ↑ / ↓ |
 | Girar | A / D o ← / → |
-| Reubicar en el último control | R; invalida la vuelta para récords |
+| Reubicar en el punto más cercano de la pista | R; invalida la vuelta para récords |
 | Pausar / continuar | Esc; también se pausa al perder el foco |
 | Menú de pausa | ↑ / ↓ y Enter: continuar, reintentar o cambiar pista |
 | Resultado | Enter reintenta; Esc vuelve a los circuitos |

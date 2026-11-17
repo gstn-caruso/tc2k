@@ -1,33 +1,39 @@
 class_name LapTracker
 extends RefCounted
-## Swept, directional gates: a fast car cannot tunnel past a thin Area3D.
-## Gate 0 is the start/finish; all others must be crossed in order.
+## Continuous route progress, with a swept, directional start/finish line.
+## Leaving the asphalt never creates a checkpoint the driver has to recover.
 
-var gates: Array[Transform3D] = []
-var half_width := 9.0
-var next_gate := 0
-var last_gate := -1
+var finish_line := Transform3D.IDENTITY
+var half_width := 18.0
+var route_length := 0.0
+var progress := 0.0
 var started := false
 var finished := false
 var invalid := false
 var elapsed := 0.0
+var _previous_distance := 0.0
 
 
-func advance(previous: Vector3, current: Vector3, delta: float) -> void:
+func advance(previous: Vector3, current: Vector3, delta: float, route_distance: float) -> void:
 	if finished:
 		return
 	if started:
 		elapsed += delta
-	if gates.is_empty() or not crosses_forward(previous, current, gates[next_gate], half_width):
-		return
-	last_gate = next_gate
-	if next_gate == 0 and started:
-		finished = true
-		return
-	if next_gate == 0:
+		if route_length > 0.0:
+			var step := wrapf(route_distance - _previous_distance, -route_length * 0.5, route_length * 0.5)
+			# A nearest-point jump to a neighbouring sector is not distance driven.
+			if absf(step) <= maxf(5.0, previous.distance_to(current) * 3.0):
+				progress += step
+		finished = route_length > 0.0 and progress >= route_length * 0.9 and crosses_forward(previous, current, finish_line, half_width)
+	elif crosses_forward(previous, current, finish_line, half_width):
 		started = true
 		elapsed = 0.0
-	next_gate = (next_gate + 1) % gates.size()
+	_previous_distance = route_distance
+
+
+func relocate(route_distance: float) -> void:
+	# Repositioning must not add lap progress or introduce a discontinuity.
+	_previous_distance = route_distance
 
 
 static func crosses_forward(previous: Vector3, current: Vector3, gate: Transform3D, width: float) -> bool:
