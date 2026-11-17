@@ -28,7 +28,7 @@ func _run() -> void:
 		assert(race.track.frame_at(0).origin.distance_to(race.track.frame_at(length - 0.01).origin) < 0.1)
 		var hud := race.get_node("HUD")
 		for point in race.track.path.curve.get_baked_points():
-			assert(Rect2(764, 502, 167, 167).has_point(hud._map_point(point)))
+			assert(hud.MAP_RECT.grow(0.1).has_point(hud._map_point(point)))
 		for i in 185:
 			await physics_frame
 		if definition["id"] == "el_zonda":
