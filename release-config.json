@@ -10,8 +10,9 @@
   "maintainer": "Gastón Caruso <gstn.caruso@gmail.com>",
   "tests": [
     "tests/smoke.gd",
+    "tests/cars.gd",
     "tests/race.gd",
     "tests/circuits.gd"
   ],
-  "summary": "Juego de carreras 3D de estética PSX con Gálvez 8, Cabalén 3 y El Zonda jugables por teclado, vuelta cronometrada e idioma automático del sistema."
+  "summary": "Juego de carreras 3D de estética PSX con Renault Fuego y prototipo seleccionables, tres circuitos jugables por teclado, vuelta cronometrada e idioma automático del sistema."
 }

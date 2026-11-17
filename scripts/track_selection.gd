@@ -59,11 +59,11 @@ func _unhandled_key_input(event: InputEvent) -> void:
 func _on_track_confirmed(_track_id: String) -> void:
 	if not RaceSetup.TRACKS[RaceSetup.selected_index]["scene"].is_empty():
 		_leaving = true
-		_start_race.call_deferred()
+		_select_car.call_deferred()
 
 
-func _start_race() -> void:
-	if get_tree().change_scene_to_file("res://scenes/race/race.tscn") != OK:
+func _select_car() -> void:
+	if get_tree().change_scene_to_file("res://scenes/car_selection.tscn") != OK:
 		_leaving = false
 
 

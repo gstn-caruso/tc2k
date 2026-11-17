@@ -11,9 +11,9 @@ implementadas; las decisiones indicadas como propuestas quedan abiertas a ajuste
 - Godot 4.7.2 con GDScript, renderer Compatibility y una presentación arcade.
 - Mundo, auto, relieve, cámara y colisiones en 3D; menús y HUD en 2D.
 - Teclado como control principal, con cambios automáticos.
-- Un solo auto disponible por ahora.
+- Dos modelos seleccionables con la misma conducción: Renault Fuego y Prototipo TC2K.
 - Ya existen el título, el selector, `RaceSetup` y una vuelta contrarreloj jugable
-  en Gálvez 8, Cabalén 3 y El Zonda: auto de prototipo, cámara, pistas horneadas,
+  en Gálvez 8, Cabalén 3 y El Zonda: selección de auto con vista previa 3D, cámara, pistas horneadas,
   progreso continuo, pausa, reposición, resultados y récord por circuito.
 - Tres pistas seleccionadas: Gálvez 8, Cabalén 3 y El Zonda.
 - Mantener la interfaz con i18n nativo de Godot, idioma del SO y español como
@@ -38,7 +38,7 @@ marcas, logos o recursos ajenos.
 ## Primera versión propuesta
 
 Modo contrarreloj de tres vueltas, centrado en aprender el circuito y mejorar
-los tiempos con un solo auto.
+los tiempos. Ya se pueden elegir dos modelos visuales con una conducción común.
 
 | Elemento | Comportamiento propuesto |
 | --- | --- |
@@ -274,8 +274,10 @@ geometría básica, antes de terminar el arte o construir los otros dos circuito
   frecuencia de física. El cronómetro no debe avanzar durante la pausa.
 - Revisar cámara, texturas, sombras, relieve y legibilidad en una build exportada
   de Linux y otra de Windows, además de las pruebas headless de lógica.
-- `tests/smoke.gd` verifica el acceso a Gálvez 3D desde el selector y conserva
-  la navegación. `tests/race.gd` prueba teclado, pausa/foco, reposición, choques,
+- `tests/smoke.gd` verifica el flujo título → circuito → auto → carrera con ambos
+  modelos en las tres pistas, la vista previa y la persistencia de selección.
+  `tests/cars.gd` verifica escala, orientación y pivotes de las ruedas.
+  `tests/race.gd` prueba teclado, pausa/foco, reposición, choques,
   progreso continuo y una vuelta física con salida al pasto y recuperación.
   Mantener esas comprobaciones.
 - `tests/circuits.gd` completa una vuelta física en cada circuito adicional,
@@ -287,8 +289,7 @@ geometría básica, antes de terminar el arte o construir los otros dos circuito
 
 ## Posibles ampliaciones
 
-- Rivales controlados por la computadora; pueden compartir el mismo modelo de
-  auto si se mantiene un solo auto disponible.
+- Rivales controlados por la computadora, usando los modelos disponibles.
 - Clasificación para determinar posiciones de largada.
 - Campeonato con puntos acumulados entre fechas.
 - Boxes y carreras especiales inspiradas en los 200 Kilómetros de Buenos Aires,

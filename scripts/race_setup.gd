@@ -1,7 +1,19 @@
 extends Node
-## Stable circuit IDs are independent from translated interface text.
+## Stable circuit and car IDs are independent from translated interface text.
 
 signal track_confirmed(track_id: String)
+signal car_confirmed(car_id: String)
+
+const CARS: Array[Dictionary] = [
+	{
+		"id": "renault_fuego", "name": "Renault Fuego", "description": "FUEGO_LIVERY",
+		"scene": "res://scenes/cars/renault_fuego.tscn", "color": Color("efb21d"),
+	},
+	{
+		"id": "prototype", "name": "PROTOTYPE_CAR", "description": "PROTOTYPE_LIVERY",
+		"scene": "res://scenes/cars/prototype.tscn", "color": Color("2676c7"),
+	},
+]
 
 const TRACKS: Array[Dictionary] = [
 	{
@@ -25,6 +37,7 @@ const TRACKS: Array[Dictionary] = [
 ]
 
 var selected_index := 0
+var selected_car_index := 0
 var confirmed := false
 
 
@@ -36,3 +49,11 @@ func select_track(index: int) -> void:
 func confirm_track() -> void:
 	confirmed = true
 	track_confirmed.emit(TRACKS[selected_index]["id"])
+
+
+func select_car(index: int) -> void:
+	selected_car_index = wrapi(index, 0, CARS.size())
+
+
+func confirm_car() -> void:
+	car_confirmed.emit(CARS[selected_car_index]["id"])
