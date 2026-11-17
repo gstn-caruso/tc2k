@@ -105,7 +105,9 @@ func _run() -> void:
 	_check_laps()
 	for locale in ["es", "en"]:
 		TranslationServer.set_locale(locale)
-		for text in ["LAP_TIME", "LAP_INVALID", "TIME_TRIAL_ONE_LAP", "RESULT_CONTROLS", "TRACK_UNAVAILABLE"]:
+		for text in ["LAP_TIME", "LAP_INVALID", "TIME_TRIAL_ONE_LAP", "RESULT_CONTROLS",
+			"TRACK_UNAVAILABLE", "HUD_LAP", "HUD_TIME", "HUD_PROGRESS", "HUD_SPEED_UNIT",
+			"HUD_ACCELERATOR", "HUD_BRAKE", "HUD_INPUTS"]:
 			assert(tr(text) != text)
 	root.get_node("Localization").apply_system_language()
 	root.get_node("RaceSetup").select_track(0)

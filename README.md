@@ -50,6 +50,10 @@ vueltas sigue pendiente.
 
 La carrera conserva la proporción 4:3. El mundo se dibuja a 640×480 y se amplía
 con filtro nearest; el HUD se dibuja a la resolución de la ventana.
+El HUD tiene instrumentos flotantes inspirados en los arcades de los 90:
+cronómetro amarillo, velocímetro con escala curva, vuelta, récord y progreso
+en verde. A la derecha muestra los mandos en vivo (dirección y pedales) y el
+minimapa del circuito. La pausa y los resultados usan bordes a cuadros.
 
 La interfaz usa i18n nativo de Godot y toma el idioma del sistema operativo al
 iniciar. Incluye español e inglés; los demás idiomas usan español como respaldo.
