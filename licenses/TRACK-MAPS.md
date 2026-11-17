@@ -41,3 +41,14 @@ las anchuras, alturas y escenografía son de prototipo. El recorrido y la longit
 se contrastaron con el [plano de TC2000 de 2017](https://www.tc2000.com.ar/archivos/carp-prev-tc2000-cordoba-2017.pdf).
 No es un relevamiento topográfico. La licencia de la adaptación es independiente
 de la del código del juego.
+
+## Trazado 3D de El Zonda
+
+`assets/tracks/el_zonda/centerline.tres` adapta a mano `el_zonda.svg`, de
+Will Pittenger. La curva y las superficies derivadas en `scenes/race/el_zonda.tscn`
+conservan [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/).
+Se suavizó la línea central, se eligieron escala y anchura de prototipo y se
+agregaron pendientes y una separación de ocho metros en el cruce del rulo.
+Las alturas, el puente y los cerros son ilustrativos; no representan un
+relevamiento ni una reproducción exacta del autódromo. La licencia de la
+adaptación es independiente de la del código del juego.

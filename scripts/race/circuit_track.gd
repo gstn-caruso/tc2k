@@ -10,6 +10,11 @@ const ROAD_SURFACE_HEIGHT := 0.05
 @export var shoulder_color := Color("b1a37e")
 @export var rail_color := Color("508eaf")
 @export var foliage_color := Color("3d6d49")
+@export var terrain_rise := 0.0
+@export var rail_offset := 18.0
+@export var vegetation_count := 270
+@export var vegetation_scale := 1.0
+@export var bridge_distance := -1.0
 @export_tool_button("Bake track geometry") var bake_action: Callable = rebuild
 @onready var path: Path3D = $Centerline
 # Dummy/headless rendering cannot serialize MultiMesh server buffers. Keep the
@@ -32,7 +37,13 @@ func frame_at(distance: float) -> Transform3D:
 	var offset := fposmod(distance, length)
 	var point := curve.sample_baked(offset, true)
 	var direction := (curve.sample_baked(fposmod(offset + 1, length), true) - curve.sample_baked(fposmod(offset - 1, length), true)).normalized()
-	return Transform3D(Basis.looking_at(direction, Vector3.UP), point)
+	var up := Vector3(0, 1, terrain_rise / 900.0).normalized()
+	return Transform3D(Basis.looking_at(direction, up), point)
+
+
+func terrain_height(point: Vector3) -> float:
+	# Illustrative valley grade, kept planar so road edges meet the terrain.
+	return terrain_rise * (0.5 - point.z / 900.0)
 
 
 func is_on_road(point: Vector3) -> bool:
@@ -111,13 +122,25 @@ func rebuild() -> void:
 	# Raise only the visual road to avoid z-fighting; collision meets the grass.
 	road_shape.position.y = -ROAD_SURFACE_HEIGHT
 	road_body.add_child(road_shape)
+	if terrain_rise > 0.0:
+		# Continuous runoff also supports the elevated bridge approaches.
+		var runoff := _strip(generated, -rail_offset, rail_offset, 0.0, ground_color)
+		runoff.name = "Runoff"
+		var runoff_shape := CollisionShape3D.new()
+		runoff_shape.shape = runoff.mesh.create_trimesh_shape()
+		(runoff_shape.shape as ConcavePolygonShape3D).backface_collision = true
+		road_body.add_child(runoff_shape)
 	_strip(generated, -8.1, -7.0, 0.065, Color("c43f34"), true)
 	_strip(generated, 7.0, 8.1, 0.065, Color("c43f34"), true)
 	_strip(generated, -6.9, -6.65, 0.07, Color("f0e9d3"))
 	_strip(generated, 6.65, 6.9, 0.07, Color("f0e9d3"))
 	_build_rails(generated)
 	_build_paddock(generated)
+	if bridge_distance >= 0.0:
+		_build_bridge(generated)
 	_build_trees(generated)
+	if terrain_rise > 0.0:
+		_build_hills(generated)
 	_set_owners(generated)
 
 
@@ -136,17 +159,33 @@ func _build_ground(parent: Node3D) -> void:
 	box.size = Vector3(1900, 2, 1700)
 	shape.shape = box
 	shape.position.y = -1.0
-	ground.add_child(shape)
+	if is_zero_approx(terrain_rise):
+		ground.add_child(shape)
+	else:
+		shape.free()
 	var surface := SurfaceTool.new()
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 2408
 	for x in range(-10, 10):
 		for z in range(-9, 9):
-			var p := Vector3(x * 95, -0.005, z * 95)
+			var p := Vector3(x * 95, 0, z * 95)
+			var a := p + Vector3(95, 0, 0)
+			var b := p + Vector3(0, 0, 95)
+			var c := p + Vector3(95, 0, 95)
+			p.y = terrain_height(p) - 0.005
+			a.y = terrain_height(a) - 0.005
+			b.y = terrain_height(b) - 0.005
+			c.y = terrain_height(c) - 0.005
 			var color := ground_color.darkened(rng.randf_range(0, 0.09))
-			_quad(surface, p, p + Vector3(95, 0, 0), p + Vector3(0, 0, 95), p + Vector3(95, 0, 95), color)
-	_mesh(ground, surface.commit(), _material(Color.WHITE, true))
+			_quad(surface, p, a, b, c, color)
+	var terrain := _mesh(ground, surface.commit(), _material(Color.WHITE, true))
+	if terrain_rise > 0.0:
+		var terrain_shape := CollisionShape3D.new()
+		terrain_shape.shape = terrain.mesh.create_trimesh_shape()
+		(terrain_shape.shape as ConcavePolygonShape3D).backface_collision = true
+		terrain_shape.position.y = 0.005
+		ground.add_child(terrain_shape)
 
 
 func _build_rails(parent: Node3D) -> void:
@@ -161,8 +200,8 @@ func _build_rails(parent: Node3D) -> void:
 		var a := frame_at(length * i / steps)
 		var b := frame_at(length * (i + 1) / steps)
 		for side in [-1.0, 1.0]:
-			var p := a * Vector3(side * 18, 0, 0)
-			var q := b * Vector3(side * 18, 0, 0)
+			var p := a * Vector3(side * rail_offset, 0, 0)
+			var q := b * Vector3(side * rail_offset, 0, 0)
 			var color := Color("d9dfd9") if (i / 4) % 2 == 0 else rail_color
 			_quad(surface, p + Vector3.UP * 0.35, q + Vector3.UP * 0.35, p + Vector3.UP * 1.05, q + Vector3.UP * 1.05, color)
 			var collision := CollisionShape3D.new()
@@ -217,7 +256,7 @@ func _build_trees(parent: Node3D) -> void:
 	cone.height = 9
 	cone.radial_segments = 5
 	leaves.mesh = cone
-	leaves.instance_count = 270
+	leaves.instance_count = vegetation_count
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 850
 	var length := ($Centerline as Path3D).curve.get_baked_length()
@@ -230,9 +269,9 @@ func _build_trees(parent: Node3D) -> void:
 		var near := ($Centerline as Path3D).curve.get_closest_point(p)
 		if Vector2(near.x - p.x, near.z - p.z).length() < 22 or (distance < 210 and side < 0):
 			p.y = -30
-		var scale_factor := rng.randf_range(0.7, 1.45)
+		var scale_factor := rng.randf_range(0.7, 1.45) * vegetation_scale
 		if p.y >= 0:
-			p.y = cone.height * 0.5 * scale_factor
+			p.y = terrain_height(p) + cone.height * 0.5 * scale_factor
 		var pose := Transform3D(Basis(Vector3.UP, rng.randf() * TAU).scaled(Vector3.ONE * scale_factor), p)
 		var color := foliage_color.lightened(rng.randf_range(0, 0.18))
 		tree_poses.append(pose)
@@ -244,3 +283,38 @@ func _build_trees(parent: Node3D) -> void:
 	trees.multimesh = leaves
 	trees.material_override = _material(Color.WHITE, true)
 	parent.add_child(trees)
+
+
+func _build_hills(parent: Node3D) -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 1967
+	var length := ($Centerline as Path3D).curve.get_baked_length()
+	var material := _material(ground_color.darkened(0.18))
+	for i in 48:
+		var frame := frame_at(length * i / 48)
+		var p := frame * Vector3((1.0 if i % 2 == 0 else -1.0) * rng.randf_range(140, 250), 0, 0)
+		var near := ($Centerline as Path3D).curve.get_closest_point(p)
+		if Vector2(near.x - p.x, near.z - p.z).length() < 120:
+			continue
+		var hill := CylinderMesh.new()
+		hill.top_radius = rng.randf_range(0, 10)
+		hill.bottom_radius = rng.randf_range(50, 85)
+		hill.height = rng.randf_range(65, 120)
+		hill.radial_segments = 5
+		var rock := _mesh(parent, hill, material)
+		p.y = terrain_height(p) + hill.height * 0.5 - 3
+		rock.position = p
+		rock.rotation.y = rng.randf() * TAU
+
+
+func _build_bridge(parent: Node3D) -> void:
+	var concrete := _material(Color("a18f79"))
+	var pose := frame_at(bridge_distance)
+	_box(parent, Vector3(rail_offset * 2, 0.6, 64), pose * Transform3D(Basis.IDENTITY, Vector3(0, -0.35, 0)), concrete)
+	for distance in [-28.0, 28.0]:
+		var frame := frame_at(bridge_distance + distance)
+		for side in [-1.0, 1.0]:
+			var p := frame * Vector3(side * (rail_offset - 1.0), 0, 0)
+			var bottom := terrain_height(p)
+			var height := maxf(0.5, p.y - bottom)
+			_box(parent, Vector3(1.1, height, 1.1), Transform3D(Basis.IDENTITY, Vector3(p.x, bottom + height * 0.5, p.z)), concrete)

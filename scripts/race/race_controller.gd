@@ -32,6 +32,7 @@ func _ready() -> void:
 	_build_world()
 	lap.finish_line = track.global_transform * track.frame_at(0.0)
 	lap.route_length = track.path.curve.get_baked_length()
+	lap.half_width = track.rail_offset
 	var records := ConfigFile.new()
 	if records.load(RECORDS_PATH) == OK:
 		best_time = maxf(0.0, float(records.get_value(track_id, "best_lap", 0.0)))

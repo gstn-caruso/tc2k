@@ -62,6 +62,9 @@ func _physics_process(delta: float) -> void:
 		if absf(hit.get_normal().y) < 0.5:
 			velocity *= 0.65
 	speed = Vector2(velocity.x, velocity.z).length()
+	if is_on_floor():
+		var normal := global_basis.inverse() * get_floor_normal()
+		_visual.rotation.x = lerpf(_visual.rotation.x, atan2(normal.z, normal.y), 1.0 - exp(-8 * delta))
 	_visual.rotation.z = lerpf(_visual.rotation.z, -steering * minf(speed / 250, 0.055), 1.0 - exp(-8 * delta))
 	for wheel in _wheels:
 		if wheel.position.z < 0.0:
@@ -69,12 +72,16 @@ func _physics_process(delta: float) -> void:
 
 
 func reset_to(pose: Transform3D) -> void:
-	global_transform = pose
+	# Steering stays around world up; only the bodywork pitches with the floor.
+	var heading := -pose.basis.z
+	heading.y = 0.0
+	global_transform = Transform3D(Basis.looking_at(heading.normalized(), Vector3.UP), pose.origin)
 	global_position.y += 0.08
 	velocity = Vector3.ZERO
 	steering = 0.0
 	speed = 0.0
 	if _visual:
+		_visual.rotation.x = 0.0
 		_visual.rotation.z = 0.0
 
 

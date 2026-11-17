@@ -128,8 +128,6 @@ func _draw_track(index: int) -> void:
 		draw_colored_polygon(PackedVector2Array([
 			Vector2(center - 24, arrow_y), Vector2(center + 24, arrow_y), Vector2(center, arrow_y + 17)
 		]), Color("bb2823"))
-		if RaceSetup.confirmed:
-			_text(tr("TRACK_UNAVAILABLE"), Vector2(center, 590), HUD_FONT, 14, Color("9e241d"), 244.0)
 
 
 func _draw_terrain(index: int, center: Vector2, active: bool) -> void:

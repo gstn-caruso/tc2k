@@ -18,7 +18,7 @@ const TRACKS: Array[Dictionary] = [
 	},
 	{
 		"id": "el_zonda", "name": "El Zonda", "city": "San Juan",
-		"scene": "", "hud_name": "EL ZONDA",
+		"scene": "res://scenes/race/el_zonda.tscn", "hud_name": "EL ZONDA",
 		"variant": "EDUARDO_COPELLO", "difficulty": "DIFFICULTY_HIGH", "color": Color("bd3329"),
 		"map": "res://assets/tracks/el_zonda.svg", "terrain": Color("bb9d76"),
 	},
