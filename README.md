@@ -42,9 +42,11 @@ cruzar la línea por primera vez. Solo la práctica guarda récords locales.
 No hay puntos de paso obligatorios: se completa el circuito y se cruza la meta
 en el sentido correcto, también por la banquina o el pasto. El auto tiene
 aceleración y dirección progresivas, frenado, una reducción suave de velocidad
-y agarre en el pasto y colisiones con los guardarraíles. Los edificios
-son arte de prototipo. Los trazados se basan en los mapas atribuidos; la anchura
-y escenografía son aproximadas. Gálvez y Cabalén son planos; El Zonda incorpora
+y agarre en el pasto y colisiones con los guardarraíles. Los choques entre autos
+transfieren impulso con un rebote leve; los roces laterales conservan el avance.
+Los edificios son arte de prototipo. Los trazados se basan en los mapas
+atribuidos; la anchura y escenografía son aproximadas. Gálvez y Cabalén son
+planos; El Zonda incorpora
 pendientes suaves, el rulo con puente y un entorno árido con cerros. Sus alturas
 son ilustrativas. Los récords son independientes por circuito. El modo de tres
 vueltas sigue pendiente.
