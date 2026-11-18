@@ -40,7 +40,7 @@ func _run() -> void:
 		TranslationServer.set_locale(locale)
 		assert(tr("PRESS_ENTER") != "PRESS_ENTER")
 		assert(tr("SELECT_CIRCUIT") != "SELECT_CIRCUIT")
-		for key in ["SELECT_CAR", "PROTOTYPE_CAR", "FUEGO_LIVERY", "PROTOTYPE_LIVERY", "CAR_COUNT", "CAR_CONTROLS"]:
+		for key in ["SELECT_CAR", "PROTOTYPE_CAR", "FUEGO_LIVERY", "SIERRA_LIVERY", "PROTOTYPE_LIVERY", "CAR_COUNT", "CAR_CONTROLS"]:
 			assert(tr(key) != key)
 		for key in ["SELECT_MODE", "MODE_PRACTICE", "MODE_COMPETITION", "PRACTICE_DESCRIPTION",
 			"PRACTICE_RULES", "COMPETITION_DESCRIPTION", "COMPETITION_RULES", "MODE_CONTROLS",
@@ -69,8 +69,9 @@ func _run() -> void:
 	assert(setup.TRACKS[0]["id"] == "galvez_8")
 	assert(setup.TRACKS[1]["id"] == "cabalen_3")
 	assert(setup.TRACKS[2]["id"] == "el_zonda")
-	assert(setup.CARS.size() == 2 and setup.selected_car_index == 0)
+	assert(setup.CARS.size() == 3 and setup.selected_car_index == 0)
 	assert(setup.CARS[0]["id"] == "renault_fuego" and setup.CARS[1]["id"] == "prototype")
+	assert(setup.CARS[2]["id"] == "ford_sierra_xr4")
 	for track: Dictionary in setup.TRACKS:
 		var map := load(track["map"]) as Texture2D
 		assert(map != null and map.get_width() > 0)
@@ -148,5 +149,5 @@ func _run() -> void:
 		await _press(KEY_ESCAPE)
 		await process_frame
 		await process_frame
-	print("Smoke test passed: OS locale, Enter gates, keyboard model preview, mode selection, wraparound, back navigation, both cars on all circuits and model persistence on retry.")
+	print("Smoke test passed: OS locale, Enter gates, keyboard model preview, mode selection, wraparound, back navigation, all three cars on all circuits and model persistence on retry.")
 	quit()

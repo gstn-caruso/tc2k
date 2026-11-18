@@ -20,9 +20,10 @@ autos. Las selecciones se conservan durante la sesión. Los tres circuitos
 tienen escenarios 3D jugables.
 
 Se puede elegir el **Renault Fuego**, con su decoración blanca y amarilla de
-Traverso, o el **Prototipo TC2K** azul y blanco. El Fuego se importó desde la
-carpeta Models del usuario; su procedencia y adaptación están documentadas en
-`licenses/CAR-MODELS.md`. Ambos modelos usan la misma conducción
+Traverso, el **Prototipo TC2K** azul y blanco o el **Ford Sierra XR4** de Bessone,
+con la decoración blanca y roja de 1987. El Fuego y el Sierra se importaron desde
+la carpeta Models del usuario; su procedencia y adaptación están documentadas en
+`licenses/CAR-MODELS.md`. Los tres modelos usan la misma conducción
 arcade y animan la dirección y la rodadura de las ruedas. La selección se
 conserva al reintentar y al volver a los circuitos durante la sesión.
 

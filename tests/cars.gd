@@ -34,18 +34,17 @@ func _run() -> void:
 			assert(visual.to_local(pivot.global_position).z < -1.0)
 		var wheel_positions: Array[Vector3] = []
 		var wheel_bases: Array[Basis] = []
+		var wheel_forward_axes: Array[Vector3] = []
 		for wheel in visual._wheel_meshes:
 			wheel_positions.append(wheel.global_position)
 			wheel_bases.append(wheel.basis)
+			wheel_forward_axes.append(wheel.get_parent().global_basis.inverse() * visual.global_basis * Vector3.FORWARD)
 		visual.update_wheels(0.3, 0.25)
 		for index in 4:
 			var wheel := visual._wheel_meshes[index]
 			assert(wheel.global_position.is_equal_approx(wheel_positions[index]))
 			assert(not wheel.basis.is_equal_approx(wheel_bases[index]))
-			var forward: Vector3 = visual.global_basis.inverse() * wheel.get_parent().global_basis * Vector3.FORWARD
-			# The imported axle faces +Z, corrected by its model wrapper.
-			if definition["id"] == "renault_fuego":
-				forward = -forward
+			var forward: Vector3 = visual.global_basis.inverse() * wheel.get_parent().global_basis * wheel_forward_axes[index]
 			assert(forward.x > 0.1 if wheel.get_parent() in visual._front_wheels else absf(forward.x) < 0.001)
 		visual.update_wheels(0.0, 0.0)
 		for pivot in visual._front_wheels:
