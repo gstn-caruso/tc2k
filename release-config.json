@@ -11,6 +11,7 @@
   "tests": [
     "tests/smoke.gd",
     "tests/cars.gd",
+    "tests/car_collisions.gd",
     "tests/race.gd",
     "tests/circuits.gd",
     "tests/competition.gd"

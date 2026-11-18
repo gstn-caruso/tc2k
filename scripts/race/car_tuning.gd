@@ -12,3 +12,4 @@ extends Resource
 @export var grass_deceleration := 2.0
 @export var steering_rate := 3.0
 @export var steering_return := 5.0
+@export_range(0.0, 1.0) var collision_restitution := 0.1
