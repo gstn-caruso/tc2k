@@ -11,7 +11,7 @@ implementadas; las decisiones indicadas como propuestas quedan abiertas a ajuste
 - Godot 4.7.2 con GDScript, renderer Compatibility y una presentación arcade.
 - Mundo, auto, relieve, cámara y colisiones en 3D; menús y HUD en 2D.
 - Teclado como control principal, con cambios automáticos.
-- Dos modelos seleccionables con la misma conducción: Renault Fuego y Prototipo TC2K.
+- Tres modelos seleccionables con la misma conducción: Renault Fuego, Prototipo TC2K y Ford Sierra XR4 de Bessone.
 - Ya existen el título, el selector, `RaceSetup` y una vuelta contrarreloj jugable
   en Gálvez 8, Cabalén 3 y El Zonda: selección de auto con vista previa 3D, cámara, pistas horneadas,
   progreso continuo, pausa, reposición, resultados y récord por circuito.

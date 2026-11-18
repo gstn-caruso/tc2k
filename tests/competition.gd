@@ -71,6 +71,8 @@ func _run() -> void:
 		await process_frame
 		var race := current_scene as RaceController
 		assert(race.mode_id == "competition" and race.opponents.size() == 3)
+		assert(race.car.model_id == setup.CARS[setup.selected_car_index]["id"])
+		assert(race.car._visual.scene_file_path == setup.CARS[setup.selected_car_index]["scene"])
 		assert(race.player_position() >= 3 and race.player_position() <= 4)
 		var grid: Array[Vector3] = []
 		for opponent in race.opponents:
@@ -79,6 +81,10 @@ func _run() -> void:
 			assert(opponent.global_position.distance_to(race.car.global_position) > 4.5)
 			for other in race.opponents:
 				assert(other == opponent or other.global_position.distance_to(opponent.global_position) > 4.5)
+		var opponent_models: Array[String] = []
+		for opponent in race.opponents:
+			opponent_models.append(opponent.model_id)
+		assert("ford_sierra_xr4" in opponent_models)
 		_check_map_markers(race)
 		Input.action_press("drive_accelerate")
 		await _ticks(45)

@@ -14,6 +14,6 @@ El logotipo, la bandera y el marco arcade se dibujan con código propio. Las
 miniaturas de los trazados adaptan mapas de Wikimedia Commons; autores,
 fuentes, modificaciones y licencias individuales figuran en `licenses/TRACK-MAPS.md`.
 
-El Renault Fuego proviene del modelo aportado por el usuario en su carpeta
-Models. Se conserva el GLB original con su atlas y decoración; procedencia,
-medidas y adaptación de ejes en `licenses/CAR-MODELS.md`.
+El Renault Fuego y el Ford Sierra XR4 provienen de los modelos aportados por el
+usuario en su carpeta Models. Se conservan los GLB originales con sus atlas y
+decoraciones; procedencia, medidas y adaptación de ejes en `licenses/CAR-MODELS.md`.
