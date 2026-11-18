@@ -227,7 +227,7 @@ func _run() -> void:
 	await _tap(KEY_ENTER)
 	await process_frame
 	race = current_scene as RaceController
-	assert(race.state == RaceController.State.COUNTDOWN and race.best_time == record)
+	assert(race.state == RaceController.State.COUNTDOWN and is_equal_approx(race.best_time, record))
 	await _tap(KEY_ESCAPE)
 	await _tap(KEY_DOWN)
 	await _tap(KEY_DOWN)

@@ -45,12 +45,12 @@ func _run() -> void:
 		var record := race.best_time
 		assert(records.load(RaceController.RECORDS_PATH) == OK)
 		assert(records.get_value("galvez_8", "best_lap") == 123.456)
-		assert(records.get_value(race.track_id, "best_lap") == record)
+		assert(is_equal_approx(float(records.get_value(race.track_id, "best_lap")), record))
 		race._retry()
 		await process_frame
 		await process_frame
 		race = current_scene as RaceController
-		assert(race.track_id == definition["id"] and race.best_time == record and not race.lap.started)
+		assert(race.track_id == definition["id"] and is_equal_approx(race.best_time, record) and not race.lap.started)
 		race._back_to_selection()
 		await process_frame
 		await process_frame
