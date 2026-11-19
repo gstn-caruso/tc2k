@@ -90,6 +90,14 @@ func _process(delta: float) -> void:
 	_turntable.rotate_y(delta * 0.3)
 
 
+func visible_car_indices() -> Array[int]:
+	# Keep the selected model between its neighbours as the collection grows.
+	var indices: Array[int] = []
+	for offset in [-1, 0, 1]:
+		indices.append(wrapi(RaceSetup.selected_car_index + offset, 0, RaceSetup.CARS.size()))
+	return indices
+
+
 func _unhandled_key_input(event: InputEvent) -> void:
 	if not event is InputEventKey or not event.pressed or event.echo or _leaving:
 		return
@@ -145,10 +153,12 @@ func _draw() -> void:
 	draw_rect(PREVIEW_RECT.grow(4), INK)
 	draw_rect(PREVIEW_RECT.grow(2), SKY, false, 2.0)
 	var count := RaceSetup.CARS.size()
-	var card_width := minf(360.0, 740.0 / count)
-	for index in count:
+	var card_width := 740.0 / 3.0
+	var visible := visible_car_indices()
+	for slot in visible.size():
+		var index := visible[slot]
 		var definition: Dictionary = RaceSetup.CARS[index]
-		var center := 480.0 + (index - (count - 1) * 0.5) * (card_width + 12.0)
+		var center := 480.0 + (slot - 1) * (card_width + 12.0)
 		var card := Rect2(center - card_width * 0.5, 506, card_width, 65)
 		var active := index == RaceSetup.selected_car_index
 		draw_rect(card.grow(3), GOLD if active else Color("b6bab6"))

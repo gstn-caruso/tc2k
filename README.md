@@ -19,13 +19,17 @@ individual o competición, **Enter** inicia la partida y **Esc** vuelve a los
 autos. Las selecciones se conservan durante la sesión. Los tres circuitos
 tienen escenarios 3D jugables.
 
-Se puede elegir el **Renault Fuego**, con su decoración blanca y amarilla de
-Traverso, el **Prototipo TC2K** azul y blanco o el **Ford Sierra XR4** de Bessone,
-con la decoración blanca y roja de 1987. El Fuego y el Sierra se importaron desde
-la carpeta Models del usuario; su procedencia y adaptación están documentadas en
-`licenses/CAR-MODELS.md`. Los tres modelos usan la misma conducción
-arcade y animan la dirección y la rodadura de las ruedas. La selección se
-conserva al reintentar y al volver a los circuitos durante la sesión.
+Se pueden elegir siete autos: **Renault Fuego** de Traverso, **Prototipo TC2K**
+azul y blanco, **Ford Sierra XR4** de Bessone, **Volkswagen Gol** de Maldonado,
+**Peugeot 405** de Traverso, **Honda Civic Coupé** de Martínez y **Chevrolet Astra**
+de Rossi. El selector muestra el auto elegido en el centro de un carrusel de
+tres tarjetas, junto a los modelos anterior y siguiente. Los seis modelos
+importados conservan las decoraciones originales de la carpeta Models del
+usuario; su procedencia y adaptación están documentadas en
+`licenses/CAR-MODELS.md`. Los siete usan la misma conducción arcade y animan
+la dirección y la rodadura de las ruedas. Los rivales CPU eligen los tres modelos
+siguientes al del jugador, sin repetirlo. La selección se conserva al reintentar
+y al volver a los circuitos durante la sesión.
 
 Los circuitos son Oscar y Juan Gálvez, circuito 8 (baja), Oscar Cabalén,
 circuito 3 (media), y El Zonda–Eduardo Copello (alta). Las miniaturas conservan
@@ -147,7 +151,11 @@ títulos de [Conventional Commits](https://www.conventionalcommits.org/):
 Los tags `vMAJOR.MINOR.PATCH` determinan la versión. Los reintentos reutilizan
 el tag del mismo commit y conservan las releases publicadas. El flujo encola
 los merges, verifica Linux y Windows y publica los artefactos con sus checksums
-después de que todas las comprobaciones pasen.
+después de que todas las comprobaciones pasen. Los paquetes viajan entre runners
+en cachés temporales con claves exclusivas de cada intento; la comprobación de
+Windows exige recuperar exactamente el ZIP generado. Las cachés de paquetes de
+`main` se eliminan después de publicar, sin depender de la cuota de artefactos
+de Actions.
 
 No se ha seleccionado una licencia para el proyecto. Las licencias del motor
 y sus dependencias se conservan por separado; ver `THIRD_PARTY_NOTICES.md`.

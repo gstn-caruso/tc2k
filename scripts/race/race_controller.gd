@@ -108,7 +108,7 @@ func _build_opponents(world: Node3D) -> void:
 		var opponent := CpuCar.new()
 		opponent.name = "CPU%d" % (index + 1)
 		opponent.track = track
-		var definition: Dictionary = setup.CARS[index % setup.CARS.size()]
+		var definition: Dictionary = setup.CARS[(setup.selected_car_index + index + 1) % setup.CARS.size()]
 		opponent.model_id = definition["id"]
 		opponent.model_scene = load(definition["scene"]) as PackedScene
 		opponent.lane_offset = 3.0 if index == 1 else -3.0

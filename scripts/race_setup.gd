@@ -23,6 +23,22 @@ const CARS: Array[Dictionary] = [
 		"id": "ford_sierra_xr4", "name": "Ford Sierra XR4", "description": "SIERRA_LIVERY",
 		"scene": "res://scenes/cars/ford_sierra_xr4.tscn", "color": Color("ce271e"),
 	},
+	{
+		"id": "volkswagen_gol", "name": "Volkswagen Gol", "description": "GOL_LIVERY",
+		"scene": "res://scenes/cars/volkswagen_gol.tscn", "color": Color("2455b1"),
+	},
+	{
+		"id": "peugeot_405", "name": "Peugeot 405", "description": "PEUGEOT_LIVERY",
+		"scene": "res://scenes/cars/peugeot_405.tscn", "color": Color("f0f0e5"),
+	},
+	{
+		"id": "honda_civic", "name": "Honda Civic Coupé", "description": "CIVIC_LIVERY",
+		"scene": "res://scenes/cars/honda_civic.tscn", "color": Color("30343e"),
+	},
+	{
+		"id": "chevrolet_astra", "name": "Chevrolet Astra", "description": "ASTRA_LIVERY",
+		"scene": "res://scenes/cars/chevrolet_astra.tscn", "color": Color("173e91"),
+	},
 ]
 
 const TRACKS: Array[Dictionary] = [
