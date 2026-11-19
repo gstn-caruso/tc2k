@@ -16,5 +16,5 @@
     "tests/circuits.gd",
     "tests/competition.gd"
   ],
-  "summary": "Juego de carreras 3D de estética PSX con siete autos y tres circuitos seleccionables, práctica individual, competición contra tres rivales CPU e idioma automático del sistema."
+  "summary": "Juego de carreras 3D de estética PSX con seis autos y tres circuitos seleccionables, práctica individual, competición contra tres rivales CPU e idioma automático del sistema."
 }

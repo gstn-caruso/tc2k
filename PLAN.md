@@ -11,8 +11,8 @@ implementadas; las decisiones indicadas como propuestas quedan abiertas a ajuste
 - Godot 4.7.2 con GDScript, renderer Compatibility y una presentación arcade.
 - Mundo, auto, relieve, cámara y colisiones en 3D; menús y HUD en 2D.
 - Teclado como control principal, con cambios automáticos.
-- Siete modelos seleccionables con la misma conducción: Renault Fuego, Prototipo
-  TC2K, Ford Sierra XR4, Volkswagen Gol, Peugeot 405, Honda Civic Coupé y Chevrolet
+- Seis modelos seleccionables con la misma conducción: Renault Fuego,
+  Ford Sierra XR4, Volkswagen Gol, Peugeot 405, Honda Civic Coupé y Chevrolet
   Astra. Los seis importados conservan su decoración y animan las cuatro ruedas.
 - Ya existen el título, el selector, `RaceSetup` y una vuelta contrarreloj jugable
   en Gálvez 8, Cabalén 3 y El Zonda: selección de auto con vista previa 3D, cámara, pistas horneadas,
@@ -44,7 +44,7 @@ marcas, logos o recursos ajenos.
 ## Primera versión propuesta
 
 Modo contrarreloj de tres vueltas, centrado en aprender el circuito y mejorar
-los tiempos. Ya se pueden elegir siete modelos visuales con una conducción común.
+los tiempos. Ya se pueden elegir seis modelos visuales con una conducción común.
 
 | Elemento | Comportamiento propuesto |
 | --- | --- |

@@ -57,7 +57,7 @@ Las escenas contenedoras giran el modelo 180° para que el frente apunte a -Z.
 Se conserva la escala en metros, el origen al suelo y los pivotes de los bujes.
 El Gol conserva su largo de aproximadamente 3,98 m. Los seis autos importados
 comparten `scripts/cars/imported_visual.gd` para registrar y animar sus ruedas,
-con el radio propio de cada modelo y la misma conducción arcade del prototipo.
+con el radio propio de cada modelo y la misma conducción arcade del juego.
 
 Referencias registradas en los `asset_info.json` originales:
 
