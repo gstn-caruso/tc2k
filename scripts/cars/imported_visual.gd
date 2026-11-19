@@ -1,5 +1,5 @@
 extends CarVisual
-## Imported Sierra: +Z front corrected by the scene, with original wheel hubs.
+## Imported cars: +Z front corrected by each scene, with original wheel hubs.
 
 
 func _ready() -> void:

@@ -58,6 +58,24 @@ func _run() -> void:
 	current_scene._back_to_selection()
 	await process_frame
 	await process_frame
+	# Every car must work as the player and appear among the CPU models.
+	for car_index in setup.CARS.size():
+		setup.select_car(car_index)
+		assert(change_scene_to_file("res://scenes/race/race.tscn") == OK)
+		await process_frame
+		await process_frame
+		var grid_race := current_scene as RaceController
+		assert(grid_race.car.model_id == setup.CARS[car_index]["id"])
+		for cpu_index in grid_race.opponents.size():
+			var definition: Dictionary = setup.CARS[(car_index + cpu_index + 1) % setup.CARS.size()]
+			var opponent := grid_race.opponents[cpu_index]
+			assert(opponent.model_id == definition["id"])
+			assert(opponent._visual.scene_file_path == definition["scene"])
+			assert(opponent._visual._wheel_meshes.size() == 4)
+		grid_race.countdown = 0.0
+		var start := grid_race.opponents[0].global_position
+		await _ticks(120)
+		assert(grid_race.opponents[0].global_position.distance_to(start) > 5.0)
 	# Competition must leave practice records untouched.
 	var records := ConfigFile.new()
 	for definition: Dictionary in setup.TRACKS:
@@ -65,7 +83,7 @@ func _run() -> void:
 	assert(records.save(RaceController.RECORDS_PATH) == OK)
 	for index in setup.TRACKS.size():
 		setup.select_track(index)
-		setup.select_car(index % setup.CARS.size())
+		setup.select_car(setup.CARS.size() - 1 - index)
 		assert(change_scene_to_file("res://scenes/race/race.tscn") == OK)
 		await process_frame
 		await process_frame
@@ -81,10 +99,8 @@ func _run() -> void:
 			assert(opponent.global_position.distance_to(race.car.global_position) > 4.5)
 			for other in race.opponents:
 				assert(other == opponent or other.global_position.distance_to(opponent.global_position) > 4.5)
-		var opponent_models: Array[String] = []
-		for opponent in race.opponents:
-			opponent_models.append(opponent.model_id)
-		assert("ford_sierra_xr4" in opponent_models)
+		for cpu_index in race.opponents.size():
+			assert(race.opponents[cpu_index].model_id == setup.CARS[(setup.selected_car_index + cpu_index + 1) % setup.CARS.size()]["id"])
 		_check_map_markers(race)
 		Input.action_press("drive_accelerate")
 		await _ticks(45)

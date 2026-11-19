@@ -34,3 +34,38 @@ El GLB apunta a +Z; `scenes/cars/ford_sierra_xr4.tscn` lo gira 180° para apunta
 a -Z como el resto del juego. Conserva el tamaño real, el origen al suelo y
 los cuatro pivotes de rueda, con radio de 0,30 m. Usa la animación de ruedas
 compartida por los otros autos y los mismos controles y parámetros de conducción.
+
+# Volkswagen Gol, Peugeot 405, Honda Civic Coupé y Chevrolet Astra
+
+Modelos aportados por el usuario desde `Models/autos/tc2000/`, copiados sin
+modificar con su atlas de decoración original incrustado:
+
+| Auto / decoración | GLB de origen | Destino en `assets/cars/` | Triángulos | Radio de rueda |
+| --- | --- | --- | --- | --- |
+| Volkswagen Gol / Guillermo Maldonado, 1994 n.º 3 | `volkswagen_gol/Gol_Maldonado_TC2000_Game.glb` | `volkswagen_gol/gol.glb` | 2004 | 0,30 m |
+| Peugeot 405 / Juan María Traverso, 1995 n.º 8 | `peugeot_405/405_Traverso_TC2000_Game.glb` | `peugeot_405/405.glb` | 2048 | 0,31 m |
+| Honda Civic Coupé / Omar Martínez, 1998 n.º 7 | `honda_civic/Civic_Martinez_TC2000_Game.glb` | `honda_civic/civic.glb` | 2024 | 0,31 m |
+| Chevrolet Astra / Matías Rossi, 2006 n.º 8 | `chevrolet_astra/Astra_Rossi_TC2000_Game.glb` | `chevrolet_astra/astra.glb` | 2048 | 0,325 m |
+
+Cada GLB contiene cinco mallas (`Body` y `Wheel_FL/FR/RL/RR`), un material y un
+atlas de 1024 × 1024 sin dependencias externas. Los `.blend`, generadores,
+referencias y validaciones permanecen en la carpeta Models de origen. Son
+interpretaciones arcade: dimensiones de carrera, logotipos y calcos secundarios
+están simplificados. Las referencias no se incorporan como texturas.
+
+Las escenas contenedoras giran el modelo 180° para que el frente apunte a -Z.
+Se conserva la escala en metros, el origen al suelo y los pivotes de los bujes.
+El Gol conserva su largo de aproximadamente 3,98 m. Los seis autos importados
+comparten `scripts/cars/imported_visual.gd` para registrar y animar sus ruedas,
+con el radio propio de cada modelo y la misma conducción arcade del prototipo.
+
+Referencias registradas en los `asset_info.json` originales:
+
+- Gol: [Carburando](https://www.carburando.com/notas/una-historia-llena-de-grandes-campeones)
+  y [Autocosmos](https://noticias.autocosmos.cl/2021/03/12/comienza-el-super-tc2000-en-argentina-la-gran-competencia-de-marcas).
+- 405: [Automundo](https://automundo.com.ar/flaco-traverso-1995-turismo-carretera-tc2000/)
+  y [TyC Sports](https://www.tycsports.com/al-angulo/juan-maria-traverso-doble-corona-turismo-carretera-tc2000-1995-id583952.html).
+- Civic: [Carburando](https://www.carburando.com/notas/honda-regresa-para-seguir-sumando-logros-su-historial)
+  y [referencia visual](https://leivag1991vehicles.blogspot.com/2018/07/honda-civic-vi-versiones-de-competicion.html).
+- Astra: [Carburando](https://www.carburando.com/notas/uno-por-uno-los-autos-con-los-que-rossi-se-consagro-campeon-del-tc2000)
+  y [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:TC2000_Chevrolet_Elaion_2006_Chevrolet_Astra.jpg).

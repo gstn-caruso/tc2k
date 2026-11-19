@@ -28,8 +28,12 @@ func _run() -> void:
 		var bounds := _bounds(visual)
 		assert(bounds.position.y >= -0.02 and bounds.position.y < 0.05)
 		assert(bounds.size.x > 1.8 and bounds.size.x < 2.3)
-		assert(bounds.size.z > 4.0 and bounds.size.z < 4.7)
+		assert(bounds.size.z > 3.9 and bounds.size.z < 4.7)
 		assert(bounds.size.y > 1.2 and bounds.size.y < 1.6)
+		if definition["id"] == "volkswagen_gol":
+			assert(absf(bounds.size.z - 3.9835) < 0.01)
+		if definition["id"] in ["volkswagen_gol", "peugeot_405", "honda_civic", "chevrolet_astra"]:
+			assert(visual.find_children("*", "MeshInstance3D", true, false).size() == 5)
 		for pivot in visual._front_wheels:
 			assert(visual.to_local(pivot.global_position).z < -1.0)
 		var wheel_positions: Array[Vector3] = []
