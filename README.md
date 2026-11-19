@@ -151,7 +151,11 @@ títulos de [Conventional Commits](https://www.conventionalcommits.org/):
 Los tags `vMAJOR.MINOR.PATCH` determinan la versión. Los reintentos reutilizan
 el tag del mismo commit y conservan las releases publicadas. El flujo encola
 los merges, verifica Linux y Windows y publica los artefactos con sus checksums
-después de que todas las comprobaciones pasen.
+después de que todas las comprobaciones pasen. Los paquetes viajan entre runners
+en cachés temporales con claves exclusivas de cada intento; la comprobación de
+Windows exige recuperar exactamente el ZIP generado. Las cachés de paquetes de
+`main` se eliminan después de publicar, sin depender de la cuota de artefactos
+de Actions.
 
 No se ha seleccionado una licencia para el proyecto. Las licencias del motor
 y sus dependencias se conservan por separado; ver `THIRD_PARTY_NOTICES.md`.
