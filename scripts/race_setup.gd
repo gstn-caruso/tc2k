@@ -16,10 +16,6 @@ const CARS: Array[Dictionary] = [
 		"scene": "res://scenes/cars/renault_fuego.tscn", "color": Color("efb21d"),
 	},
 	{
-		"id": "prototype", "name": "PROTOTYPE_CAR", "description": "PROTOTYPE_LIVERY",
-		"scene": "res://scenes/cars/prototype.tscn", "color": Color("2676c7"),
-	},
-	{
 		"id": "ford_sierra_xr4", "name": "Ford Sierra XR4", "description": "SIERRA_LIVERY",
 		"scene": "res://scenes/cars/ford_sierra_xr4.tscn", "color": Color("ce271e"),
 	},
