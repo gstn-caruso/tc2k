@@ -5,6 +5,14 @@ Juego de carreras 3D con estética PSX, Godot 4.7.2, GDScript y renderer Compati
 El alcance propuesto, las reglas de la primera versión y las tareas pendientes
 están en [el plan del juego](PLAN.md).
 
+## Descargar y jugar
+
+La [última release](https://github.com/gstn-caruso/tc2k/releases/latest) incluye
+el instalador `.deb` para Linux amd64, el ejecutable `.exe` para Windows x86_64
+y ZIPs portables para ambos sistemas con sus licencias y avisos de terceros.
+No hace falta instalar Godot para jugar. `SHA256SUMS.txt` permite verificar
+las descargas.
+
 ## Ejecutar
 
 Importá `project.godot` desde Godot 4.7.2 y presioná **F6** para ejecutar la
@@ -137,7 +145,7 @@ sin referencias faltantes.
 
 ## GitHub
 
-Repositorio privado: <https://github.com/gstn-caruso/tc2k>.
+Repositorio público: <https://github.com/gstn-caruso/tc2k>.
 
 Las pull requests verifican el juego y exportan ambos sistemas. Usá
 títulos de [Conventional Commits](https://www.conventionalcommits.org/):
