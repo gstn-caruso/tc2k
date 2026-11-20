@@ -13,6 +13,16 @@ y ZIPs portables para ambos sistemas con sus licencias y avisos de terceros.
 No hace falta instalar Godot para jugar. `SHA256SUMS.txt` permite verificar
 las descargas.
 
+## Capturas
+
+| Selección de circuito | Selección de auto |
+| --- | --- |
+| ![Selección de los tres circuitos](docs/screenshots/track-selection.png) | ![Selección del Ford Sierra XR4 con vista previa 3D](docs/screenshots/car-selection.png) |
+
+| Competición en el Gálvez | Práctica en El Zonda |
+| --- | --- |
+| ![Renault Fuego compitiendo contra los rivales CPU en el Gálvez](docs/screenshots/gameplay-galvez.png) | ![Honda Civic Coupé en una vuelta de práctica en El Zonda](docs/screenshots/gameplay-el-zonda.png) |
+
 ## Ejecutar
 
 Importá `project.godot` desde Godot 4.7.2 y presioná **F6** para ejecutar la
